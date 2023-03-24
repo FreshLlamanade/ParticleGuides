@@ -3,10 +3,14 @@
 ParticleGuides is a Minecraft Spigot plugin that introduces two new commands, /guide and /breadcrumbs, to create trails
 of colorful particles to guide players to specific targets and back to where they came.
 
+ParticleGuides optionally integrates with Essentials homes - if Essentials is running on your server, the `/guide home` 
+command will be available for use!
+
 ## Commands
 
-- `/guide` - creates a trail of particles in front of the player to guide them to a specified target. The target can be
-a set of coordinates, the player's last death location, or another player on the server. 
+- `/guide` - creates a trail of particles in front of the player to guide them to a specified target. The target can be 
+a set of coordinates, the player's current location, the player's last death location, one of the player's Essentials 
+homes, or even another player on the server.
 - `/breadcrumbs` - leaves a trail of particles behind the player as they walk, guiding them back to their starting point
 or out of a deep cave. The number of particles dropped can be limited to conserve resources.
 
