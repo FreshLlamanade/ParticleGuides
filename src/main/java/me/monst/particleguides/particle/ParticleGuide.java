@@ -31,6 +31,8 @@ abstract class ParticleGuide implements Runnable {
     public void run() {
         stopped = false;
         while (!stopped && player.isOnline()) {
+            if (!plugin.isEnabled())
+                break;
             Bukkit.getScheduler().runTaskAsynchronously(plugin, this::show);
             sleep(plugin.config().repeatDelay.get());
         }

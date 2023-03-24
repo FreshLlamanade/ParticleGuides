@@ -27,11 +27,6 @@ public class ParticleGuidesPlugin extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new BreadcrumbsListener(particleService), this);
     }
     
-    @Override
-    public void onDisable() {
-        particleService.removeGuides(); // Halt asynchronous tasks
-    }
-    
     private Essentials findEssentials() {
         Plugin plugin = getServer().getPluginManager().getPlugin("Essentials");
         if (plugin instanceof Essentials)
