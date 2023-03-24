@@ -7,6 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;
 
+import java.util.Collections;
 import java.util.List;
 
 class BreadcrumbsStart implements PlayerExecutable {
@@ -41,6 +42,8 @@ class BreadcrumbsStart implements PlayerExecutable {
     
     @Override
     public List<String> getTabCompletions(Player player, List<String> args) {
+        if (args.size() > 1)
+            return Collections.emptyList();
         return plugin.config().colorOptions.searchColors(args.get(0));
     }
     
