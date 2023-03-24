@@ -39,12 +39,11 @@ permissions:
         description: Allows a player full access to the /guide command
         default: op
         children:
-          survivalhaven.guide: true
-          survivalhaven.guide.coords: true
-          survivalhaven.guide.death: true
-          survivalhaven.guide.here: true
-          survivalhaven.guide.home: true
-          survivalhaven.guide.player: true
+          particleguides.guide.coords: true
+          particleguides.guide.death: true
+          particleguides.guide.here: true
+          particleguides.guide.home: true
+          particleguides.guide.player: true
     particleguides.breadcrumbs.*:
         description: Allows a player unlimited length access to the /breadcrumbs command
         default: op
