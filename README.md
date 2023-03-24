@@ -17,14 +17,16 @@ chosen from colors specified in the config.yml file.
 
 The following permissions are available to control access to the plugin:
 
-- `particleguides.guide` - Provides initial access to the `/guide` command.
-- `particleguides.guide.coords` - additional access to `/guide coords` to specify coordinates as a target.
-- `particleguides.guide.death` - additional access to `/guide death` to specify the player's last death location as a target.
-- `particleguides.guide.here` - additional access to `/guide here` to specify the player's current location as a target.
-- `particleguides.guide.home` - additional access to `/guide home` to specify one of the player's Essentials homes as a target.
-- `particleguides.guide.player` - additional access to `/guide player` to specify another player as a target.
-- `particleguides.breadcrumbs.<limit>` - allows access to /breadcrumbs with a limit of `<limit>` dropped particles.
-- `particleguides.breadcrumbs.*` - allows unlimited use of /breadcrumbs.
+- `particleguides.guide.coords` - Allows access to `/guide coords` to specify coordinates as a target.
+- `particleguides.guide.death` - Allows access to `/guide death` to specify the player's last death location as a target.
+- `particleguides.guide.here` - Allows access to `/guide here` to specify the player's current location as a target.
+- `particleguides.guide.home` - Allows access to `/guide home` to specify one of the player's Essentials homes as a target.
+- `particleguides.guide.player` - Allows access to `/guide player` to specify another player as a target.
+- `particleguides.guide` - Allows full access to the `/guide` command and all subcommands.
+- `particleguides.guide.<limit>` - Allows the creation of `<limit>` guides at a time.
+- `particleguides.guide.*` - Allows the creation of an unlimited number of guides at a time.
+- `particleguides.breadcrumbs.<limit>` - Allows access to /breadcrumbs with a limit of `<limit>` dropped particles.
+- `particleguides.breadcrumbs.*` - Allows unlimited use of /breadcrumbs.
 
 ## Configuration
 

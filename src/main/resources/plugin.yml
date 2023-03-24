@@ -7,35 +7,32 @@ softdepend:
   - Essentials
 
 permissions:
-    particleguides.guide:
-        description: Allows a player access to the /guide command
-        default: op
     particleguides.guide.coords:
-        description: Allows a player additional access to the /guide coords command
+        description: Allows a player access to the /guide coords command
         default: op
         children:
           survivalhaven.guide: true
     particleguides.guide.death:
-        description: Allows a player additional access to the /guide death command
+        description: Allows a player access to the /guide death command
         default: op
         children:
           survivalhaven.guide: true
     particleguides.guide.here:
-        description: Allows a player additional access to the /guide here command
+        description: Allows a player access to the /guide here command
         default: op
         children:
           survivalhaven.guide: true
     particleguides.guide.home:
-      description: Allows a player additional access to the /guide home command
+      description: Allows a player access to the /guide home command
       default: op
       children:
         survivalhaven.guide: true
     particleguides.guide.player:
-        description: Allows a player additional access to the /guide player command
+        description: Allows a player access to the /guide player command
         default: op
         children:
           survivalhaven.guide: true
-    particleguides.guide.*:
+    particleguides.guide:
         description: Allows a player full access to the /guide command
         default: op
         children:
@@ -44,6 +41,9 @@ permissions:
           particleguides.guide.here: true
           particleguides.guide.home: true
           particleguides.guide.player: true
+    particleguides.guide.*:
+      description: Allows a player to create an unlimited amount of guides at a time
+      default: op
     particleguides.breadcrumbs.*:
         description: Allows a player unlimited length access to the /breadcrumbs command
         default: op
@@ -54,6 +54,7 @@ permissions:
         description: Allows a player full access to the plugin
         default: op
         children:
+          survivalhaven.guide: true
           survivalhaven.guide.*: true
           survivalhaven.breadcrumbs.*: true
           survivalhaven.admin: true

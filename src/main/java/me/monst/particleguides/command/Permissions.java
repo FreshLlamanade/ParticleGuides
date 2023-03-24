@@ -2,7 +2,7 @@ package me.monst.particleguides.command;
 
 public final class Permissions {
     
-    public static final Permission GUIDE = permission("guide");
+    public static final PermissionLimit GUIDE = permissionLimit("guide");
     public static final Permission GUIDE_HERE = permission("guide.here");
     public static final Permission GUIDE_COORDS = permission("guide.coords");
     public static final Permission GUIDE_DEATH = permission("guide.death");
