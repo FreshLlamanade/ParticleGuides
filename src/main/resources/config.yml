@@ -1,0 +1,21 @@
+guide-length: 10
+guide-density: 5
+highlight-density: 20
+repeat-delay-millis: 1500
+particle-delay-millis: 50
+color-options:
+  pink: 'FF00FF'
+  green: '008000'
+  dark-blue: '000080'
+  dark-green: '008000'
+  black: '000000'
+  yellow: 'FFFF00'
+  dark-gray: '808080'
+  dark-red: '800000'
+  red: 'FF0000'
+  orange: 'FFA500'
+  light-gray: 'C0C0C0'
+  gray: '808080'
+  blue: '0000FF'
+  white: 'FFFFFF'
+  purple: '800080'

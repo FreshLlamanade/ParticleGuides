@@ -1,0 +1,53 @@
+package me.monst.particleguides.configuration.transform;
+
+
+import me.monst.particleguides.configuration.exception.ArgumentParseException;
+import me.monst.particleguides.configuration.exception.MissingValueException;
+import me.monst.particleguides.configuration.exception.UnreadableValueException;
+import me.monst.particleguides.configuration.exception.ValueOutOfBoundsException;
+import me.monst.particleguides.configuration.validation.Bounds;
+
+import java.util.Collection;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
+@FunctionalInterface
+public interface Transformer<T> {
+    
+    T parse(String input) throws ArgumentParseException;
+    
+    default T convert(Object object) throws ValueOutOfBoundsException, UnreadableValueException {
+        return parse(String.valueOf(object));
+    }
+    
+    default void nullCheck(Object object) throws MissingValueException {
+        if (object == null)
+            throw new MissingValueException();
+    }
+    
+    default Object toYaml(T value) {
+        return String.valueOf(value);
+    }
+    
+    default String format(T value) {
+        return String.valueOf(value);
+    }
+    
+    default Transformer<T> bounded(Bounds<T> bounds) {
+        return new BoundedTransformer<>(this, bounds);
+    }
+    
+    default <C extends Collection<T>> Transformer<C> collect(Supplier<? extends C> collectionFactory) {
+        return new CollectionTransformer<>(this, collectionFactory);
+    }
+    
+    default Transformer<Optional<T>> optional() {
+        return new OptionalTransformer<>(this);
+    }
+    
+    default <R> Transformer<R> map(Function<T, R> mapper, Function<R, T> reverseMapper) {
+        return new MappingTransformer<>(this, mapper, reverseMapper);
+    }
+    
+}
