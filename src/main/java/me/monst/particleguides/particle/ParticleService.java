@@ -24,11 +24,6 @@ public class ParticleService {
         return playerBreadcrumbsMap.get(player.getUniqueId());
     }
     
-    @Deprecated
-    public void addBreadcrumbs(Player player) {
-        addBreadcrumbs(player, ParticleColors.random());
-    }
-    
     public void addBreadcrumbs(Player player, Color color) {
         removeBreadcrumbs(player);
         Breadcrumbs breadcrumbs = new Breadcrumbs(plugin, player, color);
@@ -42,22 +37,11 @@ public class ParticleService {
             breadcrumbs.stop();
     }
     
-    @Deprecated
-    public void addGuide(Player player, Location target) {
-        addGuide(player, new FixedLocationParticleGuide(plugin, player, target.clone(), ParticleColors.random()));
-    }
-    
-    public void addGuide(Player player, Location target, Color color) {
+    public void addGuide(Player player, Location target, Color color) throws CommandExecutionException {
         addGuide(player, new FixedLocationParticleGuide(plugin, player, target.clone(), color));
     }
     
-    @Deprecated
-    public void addGuide(Player player, Player target) {
-        Supplier<Location> targetLocationSupplier = () -> target.isOnline() ? target.getLocation() : null;
-        addGuide(player, new MovingTargetParticleGuide(plugin, player, targetLocationSupplier, ParticleColors.random()));
-    }
-    
-    public void addGuide(Player player, Player target, Color color) {
+    public void addGuide(Player player, Player target, Color color) throws CommandExecutionException {
         Supplier<Location> targetLocationSupplier = () -> target.isOnline() ? target.getLocation() : null;
         addGuide(player, new MovingTargetParticleGuide(plugin, player, targetLocationSupplier, color));
     }
@@ -73,11 +57,6 @@ public class ParticleService {
         List<ParticleGuide> guides = playerGuideMap.remove(player.getUniqueId());
         if (guides != null)
             guides.forEach(ParticleGuide::stop);
-    }
-    
-    public void removeGuides() {
-        playerGuideMap.values().forEach(guides -> guides.forEach(ParticleGuide::stop));
-        playerGuideMap.clear();
     }
     
 }
