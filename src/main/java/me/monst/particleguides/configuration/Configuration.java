@@ -9,6 +9,8 @@ public class Configuration extends ConfigurationBranch {
     
     public final GuideLength length = addChild(new GuideLength());
     
+    public final BreadcrumbsDistance breadcrumbsDistance = addChild(new BreadcrumbsDistance());
+    
     public final GuideDensity guideDensity = addChild(new GuideDensity());
     
     public final HighlightDensity highlightDensity = addChild(new HighlightDensity());

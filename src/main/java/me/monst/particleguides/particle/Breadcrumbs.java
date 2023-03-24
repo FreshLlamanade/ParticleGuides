@@ -15,6 +15,7 @@ public class Breadcrumbs extends ParticleGuide {
     
     private final List<Breadcrumb> breadcrumbList;
     private final Map<Breadcrumb, Integer> breadcrumbIndexMap;
+    private final int interBreadcrumbDistance;
     private int permissionMax = calculateMaxLength();
     private boolean maxReached = false;
     
@@ -22,6 +23,7 @@ public class Breadcrumbs extends ParticleGuide {
         super(plugin, player, color);
         this.breadcrumbList = new ArrayList<>();
         this.breadcrumbIndexMap = new HashMap<>();
+        this.interBreadcrumbDistance = plugin.config().breadcrumbsDistance.get();
         dropBreadcrumb(new Breadcrumb(player.getLocation().getBlock()) {
             @Override
             void spawnParticle() {
@@ -93,8 +95,6 @@ public class Breadcrumbs extends ParticleGuide {
     
     private class Breadcrumb {
         
-        private static final int SIZE = 3;
-        
         private final Block block;
         
         Breadcrumb(Block block) {
@@ -107,17 +107,17 @@ public class Breadcrumbs extends ParticleGuide {
             if (!(o instanceof Breadcrumb)) return false;
             Breadcrumb that = (Breadcrumb) o;
             return this.block.getWorld().equals(that.block.getWorld()) &&
-                    this.block.getX() / SIZE == that.block.getX() / SIZE &&
-                    this.block.getY() / SIZE == that.block.getY() / SIZE &&
-                    this.block.getZ() / SIZE == that.block.getZ() / SIZE;
+                    this.block.getX() / interBreadcrumbDistance == that.block.getX() / interBreadcrumbDistance &&
+                    this.block.getY() / interBreadcrumbDistance == that.block.getY() / interBreadcrumbDistance &&
+                    this.block.getZ() / interBreadcrumbDistance == that.block.getZ() / interBreadcrumbDistance;
         }
     
         @Override
         public int hashCode() {
             return Objects.hash(this.block.getWorld(),
-                    this.block.getX() / SIZE,
-                    this.block.getY() / SIZE,
-                    this.block.getZ() / SIZE);
+                    this.block.getX() / interBreadcrumbDistance,
+                    this.block.getY() / interBreadcrumbDistance,
+                    this.block.getZ() / interBreadcrumbDistance);
         }
         
         World getWorld() {
