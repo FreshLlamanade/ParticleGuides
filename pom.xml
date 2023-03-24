@@ -6,7 +6,7 @@
 
     <groupId>me.monst</groupId>
     <artifactId>particleguides</artifactId>
-    <version>1.1</version>
+    <version>1.2</version>
 
     <name>ParticleGuides</name>
     <description>Highlight your way with a trail of particles!</description>
