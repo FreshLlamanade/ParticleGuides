@@ -42,11 +42,6 @@ class ParticleGuidesConfig implements Executable {
     }
     
     @Override
-    public Permission getPermission() {
-        return Permissions.ADMIN;
-    }
-    
-    @Override
     public void execute(CommandSender sender, List<String> args) throws CommandExecutionException {
         plugin.config().load();
         ListIterator<String> iterator = args.listIterator();
