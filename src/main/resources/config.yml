@@ -1,9 +1,10 @@
-guide-length: 10
-guide-density: 5
+particle-density: 5
 highlight-density: 20
 repeat-delay-millis: 1500
 particle-delay-millis: 50
-color-options:
+guide-length: 10
+blocks-per-breadcrumb: 3
+colors:
   pink: 'FF00FF'
   green: '008000'
   dark-blue: '000080'

@@ -43,7 +43,7 @@ class GuideHere implements PlayerExecutable {
     @Override
     public void execute(Player player, List<String> args) throws CommandExecutionException {
         player.sendMessage(ChatColor.YELLOW + "Guiding you to your current location...");
-        Color color = plugin.config().colorOptions.findColorOrRandom(args.isEmpty() ? null : args.get(0));
+        Color color = plugin.config().colors.findColorOrRandom(args.isEmpty() ? null : args.get(0));
         plugin.getParticleService().addGuide(player, player.getLocation(), color);
     }
     
@@ -51,7 +51,7 @@ class GuideHere implements PlayerExecutable {
     public List<String> getTabCompletions(Player player, List<String> args) {
         if (args.size() > 1)
             return Collections.emptyList();
-        return plugin.config().colorOptions.searchColors(args.get(0));
+        return plugin.config().colors.searchColors(args.get(0));
     }
     
 }

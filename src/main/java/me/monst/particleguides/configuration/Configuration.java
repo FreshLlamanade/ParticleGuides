@@ -7,11 +7,7 @@ public class Configuration extends ConfigurationBranch {
     
     private final YamlFile file;
     
-    public final GuideLength length = addChild(new GuideLength());
-    
-    public final BreadcrumbsDistance breadcrumbsDistance = addChild(new BreadcrumbsDistance());
-    
-    public final GuideDensity guideDensity = addChild(new GuideDensity());
+    public final ParticleDensity particleDensity = addChild(new ParticleDensity());
     
     public final HighlightDensity highlightDensity = addChild(new HighlightDensity());
     
@@ -19,7 +15,11 @@ public class Configuration extends ConfigurationBranch {
     
     public final ParticleDelay particleDelay = addChild(new ParticleDelay());
     
-    public final ColorOptions colorOptions = addChild(new ColorOptions());
+    public final GuideLength length = addChild(new GuideLength());
+    
+    public final BlocksPerBreadcrumb blocksPerBreadcrumb = addChild(new BlocksPerBreadcrumb());
+    
+    public final Colors colors = addChild(new Colors());
     
     public Configuration(ParticleGuidesPlugin plugin) {
         super("config.yml");

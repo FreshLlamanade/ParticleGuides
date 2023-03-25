@@ -51,7 +51,7 @@ class GuideDeath implements PlayerExecutable {
             throw new CommandExecutionException("Death location is in world '" + lastDeath.getWorld().getName() + "'.");
     
         player.sendMessage(ChatColor.YELLOW + "Guiding you to your last death...");
-        Color color = plugin.config().colorOptions.findColorOrRandom(args.isEmpty() ? null : args.get(0));
+        Color color = plugin.config().colors.findColorOrRandom(args.isEmpty() ? null : args.get(0));
         plugin.getParticleService().addGuide(player, lastDeath, color);
     }
     
@@ -59,7 +59,7 @@ class GuideDeath implements PlayerExecutable {
     public List<String> getTabCompletions(Player player, List<String> args) {
         if (args.size() > 1)
             return Collections.emptyList();
-        return plugin.config().colorOptions.searchColors(args.get(0));
+        return plugin.config().colors.searchColors(args.get(0));
     }
     
 }

@@ -7,6 +7,7 @@ import me.monst.particleguides.command.Permission;
 import me.monst.particleguides.command.Permissions;
 import me.monst.particleguides.command.PlayerExecutable;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -54,7 +55,8 @@ class GuideHome implements PlayerExecutable {
         Location home = getHome(player, homeName);
     
         player.sendMessage(ChatColor.YELLOW + "Guiding you to '" + homeName + "'...");
-        plugin.getParticleService().addGuide(player, home, plugin.config().colorOptions.findColorOrRandom(args.size() == 1 ? null : args.get(1)));
+        Color color = plugin.config().colors.findColorOrRandom(args.size() == 1 ? null : args.get(1));
+        plugin.getParticleService().addGuide(player, home, color);
     }
     
     private Location getHome(Player player, String homeName) throws CommandExecutionException {
@@ -75,7 +77,7 @@ class GuideHome implements PlayerExecutable {
         if (args.size() == 1)
             return essentials.getUser(player).getHomes();
         if (args.size() == 2)
-            return plugin.config().colorOptions.searchColors(args.get(1));
+            return plugin.config().colors.searchColors(args.get(1));
         return Collections.emptyList();
     }
     

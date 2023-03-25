@@ -23,7 +23,7 @@ public class Breadcrumbs extends ParticleGuide {
         super(plugin, player, color);
         this.breadcrumbList = new ArrayList<>();
         this.breadcrumbIndexMap = new HashMap<>();
-        this.interBreadcrumbDistance = plugin.config().breadcrumbsDistance.get();
+        this.interBreadcrumbDistance = plugin.config().blocksPerBreadcrumb.get();
         dropBreadcrumb(new Breadcrumb(player.getLocation().getBlock()) {
             @Override
             void spawnParticle() {

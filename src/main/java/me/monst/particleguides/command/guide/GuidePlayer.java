@@ -54,7 +54,7 @@ class GuidePlayer implements PlayerExecutable {
             throw new CommandExecutionException("That player is currently in a different world.");
         
         player.sendMessage(ChatColor.YELLOW + "Guiding you to " + target.getName() + "...");
-        Color color = plugin.config().colorOptions.findColorOrRandom(args.size() == 1 ? null : args.get(1));
+        Color color = plugin.config().colors.findColorOrRandom(args.size() == 1 ? null : args.get(1));
         plugin.getParticleService().addGuide(player, target, color);
     }
     
@@ -67,7 +67,7 @@ class GuidePlayer implements PlayerExecutable {
                     .filter(name -> StringUtil.startsWithIgnoreCase(name, args.get(0)))
                     .collect(Collectors.toList());
         if (args.size() == 2)
-            return plugin.config().colorOptions.searchColors(args.get(1));
+            return plugin.config().colors.searchColors(args.get(1));
         return Collections.emptyList();
     }
     

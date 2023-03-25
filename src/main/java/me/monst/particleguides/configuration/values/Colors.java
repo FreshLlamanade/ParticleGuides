@@ -10,10 +10,10 @@ import org.bukkit.Color;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class ColorOptions extends ConfigurationValue<Map<String, Color>> {
+public class Colors extends ConfigurationValue<Map<String, Color>> {
     
-    public ColorOptions() {
-        super("color-options",
+    public Colors() {
+        super("colors",
                 getDefaultColorOptions(),
                 new MapTransformer<>(HashMap::new, new StringTransformer(), new ColorTransformer())
                         .bounded(Bound.disallowing(Map::isEmpty, empty -> onlyWhite())));

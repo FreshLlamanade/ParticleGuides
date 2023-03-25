@@ -54,7 +54,7 @@ class GuideCoords implements PlayerExecutable {
         int z = parseCoordinate(argIterator.next());
         player.sendMessage(ChatColor.YELLOW + "Guiding you to coordinates " + x + ", " + y + ", " + z + "...");
         Location coordinates = new Location(player.getWorld(), x + 0.5, y + 0.5, z + 0.5);
-        Color color = plugin.config().colorOptions.findColorOrRandom(args.size() == 3 ? null : args.get(3));
+        Color color = plugin.config().colors.findColorOrRandom(args.size() == 3 ? null : args.get(3));
         plugin.getParticleService().addGuide(player, coordinates, color);
     }
     
@@ -83,7 +83,7 @@ class GuideCoords implements PlayerExecutable {
             return coordinateCompletions;
         }
         if (args.size() == 4)
-            return plugin.config().colorOptions.searchColors(args.get(3));
+            return plugin.config().colors.searchColors(args.get(3));
         return Collections.emptyList();
     }
     
