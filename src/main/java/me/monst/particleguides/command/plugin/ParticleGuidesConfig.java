@@ -3,6 +3,8 @@ package me.monst.particleguides.command.plugin;
 import me.monst.particleguides.ParticleGuidesPlugin;
 import me.monst.particleguides.command.CommandExecutionException;
 import me.monst.particleguides.command.Executable;
+import me.monst.particleguides.command.Permission;
+import me.monst.particleguides.command.Permissions;
 import me.monst.particleguides.configuration.ConfigurationBranch;
 import me.monst.particleguides.configuration.ConfigurationNode;
 import me.monst.particleguides.configuration.ConfigurationValue;
@@ -37,6 +39,11 @@ class ParticleGuidesConfig implements Executable {
     @Override
     public String getUsage() {
         return "/particleguides config <path> <value>";
+    }
+    
+    @Override
+    public Permission getPermission() {
+        return Permissions.ADMIN;
     }
     
     @Override
