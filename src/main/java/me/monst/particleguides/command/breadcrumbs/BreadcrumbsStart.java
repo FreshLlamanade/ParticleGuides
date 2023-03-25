@@ -30,7 +30,7 @@ class BreadcrumbsStart implements PlayerExecutable {
     
     @Override
     public String getUsage() {
-        return "/breadcrumbs start";
+        return "/breadcrumbs start [color]";
     }
     
     @Override
