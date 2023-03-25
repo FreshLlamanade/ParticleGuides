@@ -43,3 +43,6 @@ colors:
   blue: '0000FF'
   white: 'FFFFFF'
   purple: '800080'
+
+# Whether particle guides are visible to all players, or only personally to the player who created them.
+global-visibility: false

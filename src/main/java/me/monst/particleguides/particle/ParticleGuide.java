@@ -56,11 +56,23 @@ abstract class ParticleGuide implements Runnable {
     }
     
     void spawnParticle(Location location) {
-        player.spawnParticle(Particle.REDSTONE, location, plugin.config().particleDensity.get(), dustOptions);
+        int density = plugin.config().particleDensity.get();
+        if (plugin.config().globalVisibility.get())
+            player.getWorld()
+                    .spawnParticle(Particle.REDSTONE, location, density, dustOptions);
+        else
+            player
+                    .spawnParticle(Particle.REDSTONE, location, density, dustOptions);
     }
     
     void highlight(Location location) {
-        player.spawnParticle(Particle.REDSTONE, location, plugin.config().highlightDensity.get(), 1, 1, 1, dustOptions);
+        int density = plugin.config().highlightDensity.get();
+        if (plugin.config().globalVisibility.get())
+            player.getWorld()
+                    .spawnParticle(Particle.REDSTONE, location, density, 1, 1, 1, dustOptions);
+        else
+            player
+                    .spawnParticle(Particle.REDSTONE, location, density, 1, 1, 1, dustOptions);
     }
     
     Location getPlayerLocation() {

@@ -21,6 +21,8 @@ public class Configuration extends ConfigurationBranch {
     
     public final Colors colors = addChild(new Colors());
     
+    public final GlobalVisibility globalVisibility = addChild(new GlobalVisibility());
+    
     public Configuration(ParticleGuidesPlugin plugin) {
         super("config.yml");
         this.file = new YamlFile(plugin, getKey()); // Create config.yml file
