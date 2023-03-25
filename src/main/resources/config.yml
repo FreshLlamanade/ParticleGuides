@@ -1,9 +1,32 @@
+# The config.yml file is used to configure the plugin and can be changed in-game using the /particleguides config command.
+
+# The density, or opacity, of each particle "dot". The higher the number, the more particles will be shown per dot,
+# and the longer the dots will be visible. The default value is 5.
 particle-density: 5
+
+# The density, or opacity, of a target being highlighted with particles. The higher the number, the more particles
+# will be shown around the target, and the longer the highlighting will be visible. The default value is 20.
 highlight-density: 20
+
+# The delay, in milliseconds, between repetitions of the particle effect. The higher the number, the less frequently
+# the particles will be shown. The default value is 1500 milliseconds.
 repeat-delay-millis: 1500
+
+# The delay, in milliseconds, between each particle being shown. The higher the number, the slower the particles
+# will appear to move. The default value is 50 milliseconds, or a speed of 20 blocks per second.
 particle-delay-millis: 50
+
+# The distance, in blocks, that a particle guide will move forward in front of the player. The default value is 10 blocks.
 guide-length: 10
+
+# The number of blocks the player must move before another breadcrumb is dropped on their position.
+# The breadcrumbs will occasionally be dropped closer to one another than this value, if the player moves diagonally.
+# This is because this value is used to subdivide the world into cubic chunks of this size, and a breadcrumb is
+# dropped when a player moves from one such chunk to another. The default value is 3 blocks.
 blocks-per-breadcrumb: 3
+
+# The available colors for the particle guides, in hexadecimal format (https://www.rgbtohex.net/).
+# The default colors are shown below.
 colors:
   pink: 'FF00FF'
   green: '008000'

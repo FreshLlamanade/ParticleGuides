@@ -34,8 +34,35 @@ The following permissions are available to control access to the plugin:
 
 ## Configuration
 
-Particle size, speed, density, and color options are all configurable via the config.yml file and in-game through the 
-`/particleguides config` command.
+The plugin is configurable directly via the `config.yml` file and in-game through the `/particleguides config` command.
+The available configuration values are as follows:
+
+
+- `particle-density`: The density, or opacity, of each particle "dot". The higher the number, the more particles will 
+be shown per dot, and the longer the dots will be visible. The default value is 5.
+
+- `highlight-density`: The density, or opacity, of a target being highlighted with particles. The higher the number, the 
+more particles will be shown around the target, and the longer the highlighting will be visible. The default value is 20.
+
+- `repeat-delay-millis`: The delay, in milliseconds, between repetitions of the particle effect. The higher the number, the 
+less frequently the particles will be shown. The default value is 1500 milliseconds.
+
+- `particle-delay-millis`: The delay, in milliseconds, between each particle being shown. The higher the number, the slower 
+the particles will appear to move. The default value is 50 milliseconds, or a speed of 20 blocks per second.
+
+- `guide-length`: The distance, in blocks, that a particle guide will move forward in front of the player. 
+The default value is 10 blocks.
+
+- `blocks-per-breadcrumb`: The number of blocks the player must move before another breadcrumb is dropped on their position.
+The breadcrumbs will occasionally be dropped closer to one another than this value, if the player moves diagonally.
+This is because this value is used to subdivide the world into cubic chunks of this size, and a breadcrumb is
+dropped when a player moves from one such chunk to another. The default value is 3 blocks.
+
+- `colors`: The available colors for the particle guides, in the format `name:hex`, where `name` is the name of the
+color and `hex` is that RGB color in [hexadecimal format](https://www.rgbtohex.net/).
+For example, adding the entry `red: 'FF0000'` will allow the color `red` to be used in the `/guide` and `/breadcrumbs` 
+commands, and will appear in-game as a bright red color (RGB 255, 0, 0). A large list of default colors is provided in
+the `config.yml` file.
 
 ## Quick Installation Guide
 
