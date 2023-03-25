@@ -76,13 +76,25 @@ class ParticleGuidesConfig implements Executable {
     public List<String> getTabCompletions(Player player, List<String> args) {
         ListIterator<String> iterator = args.listIterator();
         ConfigurationNode targetNode = plugin.config().deepSearch(iterator);
-        if (targetNode instanceof ConfigurationBranch)
+        if (targetNode instanceof ConfigurationBranch) {
+            if (iterator.nextIndex() < args.size() - 1) // If the search was cut short before the last argument
+                return Collections.emptyList(); // Then there must be a typo previously in the path
+            String lastArg = args.get(args.size() - 1);
             return ((ConfigurationBranch) targetNode).getChildren().keySet().stream()
-                    .filter(child -> child.startsWith(args.get(iterator.nextIndex())))
+                    .filter(child -> containsIgnoreCase(child, lastArg))
                     .collect(Collectors.toList());
-        if (targetNode instanceof ConfigurationValue<?>)
+        } else if (targetNode instanceof ConfigurationValue<?>)
             return ((ConfigurationValue<?>) targetNode).getTabCompletions(player, args.subList(iterator.nextIndex(), args.size()));
         return Collections.emptyList();
+    }
+    
+    private static boolean containsIgnoreCase(String string, String substring) {
+        int len = substring.length();
+        int max = string.length() - len;
+        for (int i = 0; i <= max; i++)
+            if (string.regionMatches(true, i, substring, 0, len))
+                return true;
+        return false;
     }
     
 }

@@ -15,7 +15,7 @@ public class Configuration extends ConfigurationBranch {
     
     public final ParticleDelay particleDelay = addChild(new ParticleDelay());
     
-    public final GuideLength length = addChild(new GuideLength());
+    public final GuideLength guideLength = addChild(new GuideLength());
     
     public final BlocksPerBreadcrumb blocksPerBreadcrumb = addChild(new BlocksPerBreadcrumb());
     

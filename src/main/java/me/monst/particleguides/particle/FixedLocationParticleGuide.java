@@ -27,14 +27,14 @@ public class FixedLocationParticleGuide extends ParticleGuide {
         }
         // Represents the player's initial position, although the player could be moving this will stay the same
         final Location startLocation = getPlayerLocation();
-        if (startLocation.distance(target) <= plugin.config().length.get()) {
+        if (startLocation.distance(target) <= plugin.config().guideLength.get()) {
             // If the player is within range, make a puff of particles around the target to highlight it
             highlight(target);
             return;
         }
         // Find the direction between the player's initial position and the target
         final Vector direction = getVectorBetween(startLocation, target).normalize();
-        for (int blocksAway = 1; blocksAway <= plugin.config().length.get(); blocksAway++) {
+        for (int blocksAway = 1; blocksAway <= plugin.config().guideLength.get(); blocksAway++) {
             // Get the distance the player has moved in the direction of the target (could be negative)
             double movedTowardsTarget = getVectorBetween(startLocation, getPlayerLocation()).dot(direction);
             // Make sure the next particle's location is offset by the distance the player moved

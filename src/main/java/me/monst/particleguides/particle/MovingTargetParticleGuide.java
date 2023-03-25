@@ -29,7 +29,7 @@ public class MovingTargetParticleGuide extends ParticleGuide {
     void show() {
         // Get the location where the player was initially standing
         Location startLocation = getPlayerLocation();
-        for (int multiplier = 1; multiplier <= plugin.config().length.get(); multiplier++) {
+        for (int multiplier = 1; multiplier <= plugin.config().guideLength.get(); multiplier++) {
             Location currentTargetLocation = this.target.get(); // Get the current target location
             if (currentTargetLocation == null || differentWorlds(startLocation.getWorld(), currentTargetLocation.getWorld())) {
                 // Target is either in a different world or has completely disappeared, count up to automatically disable
@@ -38,7 +38,7 @@ public class MovingTargetParticleGuide extends ParticleGuide {
                 return;
             }
             timesSinceTargetLastSeen = 0;
-            if (startLocation.distance(currentTargetLocation) <= plugin.config().length.get()) {
+            if (startLocation.distance(currentTargetLocation) <= plugin.config().guideLength.get()) {
                 // If the player is within range, make a puff of particles around the target to highlight it
                 highlight(currentTargetLocation);
                 break;
