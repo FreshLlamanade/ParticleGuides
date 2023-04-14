@@ -1,18 +1,19 @@
 package me.monst.particleguides.command.guide;
 
-import me.monst.particleguides.ParticleGuidesPlugin;
-import me.monst.particleguides.command.PlayerExecutable;
+import me.monst.particleguides.particle.ParticleService;
+import me.monst.pluginutil.command.Arguments;
+import me.monst.pluginutil.command.Command;
+import me.monst.pluginutil.command.exception.CommandExecutionException;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.List;
-
-class GuideStop implements PlayerExecutable {
+class GuideStop implements Command {
     
-    private final ParticleGuidesPlugin plugin;
+    private final ParticleService particleService;
     
-    GuideStop(ParticleGuidesPlugin plugin) {
-        this.plugin = plugin;
+    GuideStop(ParticleService particleService) {
+        this.particleService = particleService;
     }
     
     @Override
@@ -31,9 +32,10 @@ class GuideStop implements PlayerExecutable {
     }
     
     @Override
-    public void execute(Player player, List<String> args) {
+    public void execute(CommandSender sender, Arguments args) throws CommandExecutionException {
+        Player player = Command.playerOnly(sender);
         player.sendMessage(ChatColor.YELLOW + "Guides cleared.");
-        plugin.getParticleService().removeGuides(player);
+        particleService.removeGuides(player);
     }
     
 }

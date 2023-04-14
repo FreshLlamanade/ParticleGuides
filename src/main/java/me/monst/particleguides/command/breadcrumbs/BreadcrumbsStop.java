@@ -1,18 +1,19 @@
 package me.monst.particleguides.command.breadcrumbs;
 
-import me.monst.particleguides.ParticleGuidesPlugin;
-import me.monst.particleguides.command.PlayerExecutable;
+import me.monst.particleguides.particle.ParticleService;
+import me.monst.pluginutil.command.Arguments;
+import me.monst.pluginutil.command.Command;
+import me.monst.pluginutil.command.exception.CommandExecutionException;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.List;
-
-class BreadcrumbsStop implements PlayerExecutable {
+class BreadcrumbsStop implements Command {
     
-    private final ParticleGuidesPlugin plugin;
+    private final ParticleService particleService;
     
-    BreadcrumbsStop(ParticleGuidesPlugin plugin) {
-        this.plugin = plugin;
+    BreadcrumbsStop(ParticleService particleService) {
+        this.particleService = particleService;
     }
     
     @Override
@@ -31,9 +32,10 @@ class BreadcrumbsStop implements PlayerExecutable {
     }
     
     @Override
-    public void execute(Player player, List<String> args) {
+    public void execute(CommandSender sender, Arguments args) throws CommandExecutionException {
+        Player player = Command.playerOnly(sender);
         player.sendMessage(ChatColor.YELLOW + "Breadcrumbs cleared.");
-        plugin.getParticleService().removeBreadcrumbs(player);
+        particleService.removeBreadcrumbs(player);
     }
     
 }

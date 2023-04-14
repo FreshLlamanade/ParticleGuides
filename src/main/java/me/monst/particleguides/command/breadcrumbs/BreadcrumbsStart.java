@@ -1,21 +1,26 @@
 package me.monst.particleguides.command.breadcrumbs;
 
-import me.monst.particleguides.ParticleGuidesPlugin;
-import me.monst.particleguides.command.CommandExecutionException;
-import me.monst.particleguides.command.PlayerExecutable;
+import me.monst.particleguides.configuration.values.Colors;
+import me.monst.particleguides.particle.ParticleService;
+import me.monst.pluginutil.command.Arguments;
+import me.monst.pluginutil.command.Command;
+import me.monst.pluginutil.command.exception.CommandExecutionException;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Collections;
 import java.util.List;
 
-class BreadcrumbsStart implements PlayerExecutable {
+class BreadcrumbsStart implements Command {
     
-    private final ParticleGuidesPlugin plugin;
+    private final ParticleService particleService;
+    private final Colors colors;
     
-    BreadcrumbsStart(ParticleGuidesPlugin plugin) {
-        this.plugin = plugin;
+    BreadcrumbsStart(ParticleService particleService, Colors colors) {
+        this.particleService = particleService;
+        this.colors = colors;
     }
     
     @Override
@@ -34,17 +39,18 @@ class BreadcrumbsStart implements PlayerExecutable {
     }
     
     @Override
-    public void execute(Player player, List<String> args) throws CommandExecutionException {
+    public void execute(CommandSender sender, Arguments args) throws CommandExecutionException {
+        Player player = Command.playerOnly(sender);
+        Color color = args.first().map(colors::get).orElseGet(colors::random);
         player.sendMessage(ChatColor.YELLOW + "Starting breadcrumbs...");
-        Color color = plugin.config().colors.findColorOrRandom(args.isEmpty() ? null : args.get(0));
-        plugin.getParticleService().addBreadcrumbs(player, color);
+        particleService.addBreadcrumbs(player, color);
     }
     
     @Override
-    public List<String> getTabCompletions(Player player, List<String> args) {
+    public List<String> getTabCompletions(Player player, Arguments args) {
         if (args.size() > 1)
             return Collections.emptyList();
-        return plugin.config().colors.searchColors(args.get(0));
+        return args.first().map(colors::search).orElseGet(colors::names);
     }
     
 }

@@ -1,13 +1,13 @@
 package me.monst.particleguides;
 
 import com.earth2me.essentials.Essentials;
-import me.monst.particleguides.command.CommandRegisterService;
 import me.monst.particleguides.command.breadcrumbs.BreadcrumbsCommand;
 import me.monst.particleguides.command.guide.GuideCommand;
 import me.monst.particleguides.command.plugin.ParticleGuidesCommand;
 import me.monst.particleguides.configuration.Configuration;
 import me.monst.particleguides.particle.BreadcrumbsListener;
 import me.monst.particleguides.particle.ParticleService;
+import me.monst.pluginutil.command.CommandRegisterService;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;

@@ -1,10 +1,10 @@
 package me.monst.particleguides.configuration.values;
 
-import me.monst.particleguides.configuration.ConfigurationValue;
 import me.monst.particleguides.configuration.transform.ColorTransformer;
-import me.monst.particleguides.configuration.transform.MapTransformer;
 import me.monst.particleguides.configuration.transform.StringTransformer;
-import me.monst.particleguides.configuration.validation.Bound;
+import me.monst.pluginutil.configuration.ConfigurationValue;
+import me.monst.pluginutil.configuration.transform.MapTransformer;
+import me.monst.pluginutil.configuration.validation.Bound;
 import org.bukkit.Color;
 
 import java.util.*;
@@ -45,24 +45,22 @@ public class Colors extends ConfigurationValue<Map<String, Color>> {
         return onlyWhite;
     }
     
-    public Color findColorOrRandom(String name) {
-        return findColor(name).orElseGet(this::randomColor);
+    public Color get(String name) {
+        return get().get(name);
     }
     
-    public Optional<Color> findColor(String name) {
-        if (name == null)
-            return Optional.empty();
-        return Optional.ofNullable(get().get(name));
-    }
-    
-    public Color randomColor() {
+    public Color random() {
         Collection<Color> colors = get().values();
         return colors.stream().skip((int) (colors.size() * Math.random())).findFirst().orElse(Color.WHITE);
     }
     
-    public List<String> searchColors(String search) {
+    public List<String> search(String search) {
         String lowerCaseSearch = search.toLowerCase();
         return get().keySet().stream().filter(key -> key.contains(lowerCaseSearch)).collect(Collectors.toList());
+    }
+    
+    public List<String> names() {
+        return new ArrayList<>(get().keySet());
     }
     
 }

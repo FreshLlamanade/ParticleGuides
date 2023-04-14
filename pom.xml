@@ -6,7 +6,7 @@
 
     <groupId>me.monst</groupId>
     <artifactId>particleguides</artifactId>
-    <version>1.3.1</version>
+    <version>1.3.2</version>
 
     <name>ParticleGuides</name>
     <description>Highlight your way with a trail of particles!</description>
@@ -41,6 +41,12 @@
             <version>2.18.2</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>me.monst</groupId>
+            <artifactId>plugin-util</artifactId>
+            <version>1.4.5</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -62,6 +68,28 @@
                     <source>1.8</source>
                     <target>1.8</target>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.4.2-SNAPSHOT</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <relocations>
+                                <relocation>
+                                    <pattern>me.monst.pluginutil</pattern>
+                                    <shadedPattern>me.monst.survivalhaven.dependencies.pluginutil</shadedPattern>
+                                </relocation>
+                            </relocations>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>com.coderplus.maven.plugins</groupId>

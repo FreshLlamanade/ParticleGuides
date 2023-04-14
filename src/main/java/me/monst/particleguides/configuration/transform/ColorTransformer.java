@@ -1,6 +1,7 @@
 package me.monst.particleguides.configuration.transform;
 
-import me.monst.particleguides.configuration.exception.ArgumentParseException;
+import me.monst.pluginutil.configuration.exception.ArgumentParseException;
+import me.monst.pluginutil.configuration.transform.Transformer;
 import org.bukkit.Color;
 
 public class ColorTransformer implements Transformer<Color> {

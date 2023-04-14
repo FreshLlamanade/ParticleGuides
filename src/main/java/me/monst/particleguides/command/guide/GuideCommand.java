@@ -2,55 +2,34 @@ package me.monst.particleguides.command.guide;
 
 import com.earth2me.essentials.Essentials;
 import me.monst.particleguides.ParticleGuidesPlugin;
-import me.monst.particleguides.command.Executable;
-import me.monst.particleguides.command.Permission;
 import me.monst.particleguides.command.Permissions;
-import me.monst.particleguides.command.TopLevelDelegator;
+import me.monst.particleguides.configuration.values.Colors;
+import me.monst.particleguides.particle.ParticleService;
+import me.monst.pluginutil.command.Permission;
+import me.monst.pluginutil.command.SimpleCommandDelegator;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-public class GuideCommand implements TopLevelDelegator {
-    
-    private final Map<String, Executable> subCommands = new LinkedHashMap<>();
+public class GuideCommand extends SimpleCommandDelegator {
     
     public GuideCommand(ParticleGuidesPlugin plugin, Essentials essentials) {
-        addSubCommand(new GuideCoords(plugin));
-        addSubCommand(new GuideDeath(plugin));
-        addSubCommand(new GuideHere(plugin));
+        super(
+                "guide",
+                "Create a particle trail which guides you to a specified location.",
+                "/guide <coords|death|here|home|player|stop>"
+        );
+        ParticleService particleService = plugin.getParticleService();
+        Colors colors = plugin.config().colors;
+        addSubCommand(new GuideCoords(particleService, colors));
+        addSubCommand(new GuideDeath(particleService, colors));
+        addSubCommand(new GuideHere(particleService, colors));
         if (essentials != null)
-            addSubCommand(new GuideHome(plugin, essentials));
-        addSubCommand(new GuidePlayer(plugin));
-        addSubCommand(new GuideStop(plugin));
-    }
-    
-    private void addSubCommand(Executable subCommand) {
-        subCommands.put(subCommand.getName(), subCommand);
-    }
-    
-    @Override
-    public String getName() {
-        return "guide";
-    }
-    
-    @Override
-    public String getDescription() {
-        return "Create a particle trail which guides you to a specified location.";
-    }
-    
-    @Override
-    public String getUsage() {
-        return "/guide <coords|death|here|home|player|stop>";
+            addSubCommand(new GuideHome(particleService, colors, essentials));
+        addSubCommand(new GuidePlayer(particleService, colors));
+        addSubCommand(new GuideStop(particleService));
     }
     
     @Override
     public Permission getPermission() {
         return Permissions.GUIDE;
-    }
-    
-    @Override
-    public Map<String, Executable> getSubCommands() {
-        return subCommands;
     }
     
 }

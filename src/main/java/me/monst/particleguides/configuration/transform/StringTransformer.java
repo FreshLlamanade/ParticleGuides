@@ -1,14 +1,12 @@
 package me.monst.particleguides.configuration.transform;
 
 
-import me.monst.particleguides.configuration.exception.ArgumentParseException;
-import me.monst.particleguides.configuration.exception.UnreadableValueException;
-import me.monst.particleguides.configuration.exception.ValueOutOfBoundsException;
+import me.monst.pluginutil.configuration.transform.Transformer;
 
 public class StringTransformer implements Transformer<String> {
     
     @Override
-    public String parse(String input) throws ArgumentParseException {
+    public String parse(String input) {
         return input;
     }
     

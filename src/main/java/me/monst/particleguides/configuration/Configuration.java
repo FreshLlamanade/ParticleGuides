@@ -2,6 +2,8 @@ package me.monst.particleguides.configuration;
 
 import me.monst.particleguides.ParticleGuidesPlugin;
 import me.monst.particleguides.configuration.values.*;
+import me.monst.pluginutil.configuration.ConfigurationBranch;
+import me.monst.pluginutil.configuration.YamlFile;
 
 public class Configuration extends ConfigurationBranch {
     

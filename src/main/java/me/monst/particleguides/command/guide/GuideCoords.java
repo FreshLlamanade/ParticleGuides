@@ -1,27 +1,31 @@
 package me.monst.particleguides.command.guide;
 
-import me.monst.particleguides.ParticleGuidesPlugin;
-import me.monst.particleguides.command.CommandExecutionException;
-import me.monst.particleguides.command.Permission;
 import me.monst.particleguides.command.Permissions;
-import me.monst.particleguides.command.PlayerExecutable;
+import me.monst.particleguides.configuration.values.Colors;
+import me.monst.particleguides.particle.ParticleService;
+import me.monst.pluginutil.command.Arguments;
+import me.monst.pluginutil.command.Command;
+import me.monst.pluginutil.command.Permission;
+import me.monst.pluginutil.command.exception.CommandExecutionException;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
-class GuideCoords implements PlayerExecutable {
+class GuideCoords implements Command {
     
-    private final ParticleGuidesPlugin plugin;
+    private final ParticleService particleService;
+    private final Colors colors;
     
-    GuideCoords(ParticleGuidesPlugin plugin) {
-        this.plugin = plugin;
+    GuideCoords(ParticleService particleService, Colors colors) {
+        this.particleService = particleService;
+        this.colors = colors;
     }
     
     @Override
@@ -45,45 +49,40 @@ class GuideCoords implements PlayerExecutable {
     }
     
     @Override
-    public void execute(Player player, List<String> args) throws CommandExecutionException {
-        if (args.size() < 3)
-            throw new CommandExecutionException("Please specify the x, y, and z coordinates to locate.");
-        Iterator<String> argIterator = args.iterator();
-        int x = parseCoordinate(argIterator.next());
-        int y = parseCoordinate(argIterator.next());
-        int z = parseCoordinate(argIterator.next());
-        player.sendMessage(ChatColor.YELLOW + "Guiding you to coordinates " + x + ", " + y + ", " + z + "...");
+    public void execute(CommandSender sender, Arguments args) throws CommandExecutionException {
+        Player player = Command.playerOnly(sender);
+        int x = args.first().tryMap(this::parseCoordinate).expect("Please specify the x, y, and z coordinates to locate.");
+        int y = args.second().tryMap(this::parseCoordinate).expect("Please specify the y and z coordinates to locate.");
+        int z = args.third().tryMap(this::parseCoordinate).expect("Please specify the z coordinate to locate.");
         Location coordinates = new Location(player.getWorld(), x + 0.5, y + 0.5, z + 0.5);
-        Color color = plugin.config().colors.findColorOrRandom(args.size() == 3 ? null : args.get(3));
-        plugin.getParticleService().addGuide(player, coordinates, color);
+        Color color = args.fourth().map(colors::get).orElseGet(colors::random);
+        player.sendMessage(ChatColor.YELLOW + "Guiding you to coordinates " + x + ", " + y + ", " + z + "...");
+        particleService.addGuide(player, coordinates, color);
     }
     
     private int parseCoordinate(String arg) throws CommandExecutionException {
         try {
             return Integer.parseInt(arg);
         } catch (NumberFormatException e) {
-            throw new CommandExecutionException(arg + " is not a valid coordinate.");
+            throw Command.exception(arg + " is not a valid coordinate.");
         }
     }
     
     @Override
-    public List<String> getTabCompletions(Player player, List<String> args) {
+    public Iterable<?> getTabCompletions(Player player, Arguments args) {
         if (args.size() <= 3) {
-            List<String> coordinateCompletions = new ArrayList<>(1);
+            List<Object> coordinateCompletions = new ArrayList<>(1);
             Block block = player.getLocation().getBlock();
-            String x = "" + block.getX();
-            String y = "" + block.getY();
-            String z = "" + block.getZ();
             if (args.size() == 1)
-                coordinateCompletions.add(String.join(" ", x, y, z));
+                coordinateCompletions.add(block.getX() + " " + block.getY() + " " + block.getZ());
             else if (args.size() == 2)
-                coordinateCompletions.add(String.join(" ", y, z));
+                coordinateCompletions.add(block.getY() + " " + block.getZ());
             else
-                coordinateCompletions.add(z);
+                coordinateCompletions.add(block.getZ());
             return coordinateCompletions;
         }
         if (args.size() == 4)
-            return plugin.config().colors.searchColors(args.get(3));
+            return args.fourth().map(colors::search).orElseGet(colors::names);
         return Collections.emptyList();
     }
     

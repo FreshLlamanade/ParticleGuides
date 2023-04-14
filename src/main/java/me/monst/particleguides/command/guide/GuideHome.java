@@ -1,26 +1,31 @@
 package me.monst.particleguides.command.guide;
 
 import com.earth2me.essentials.Essentials;
-import me.monst.particleguides.ParticleGuidesPlugin;
-import me.monst.particleguides.command.CommandExecutionException;
-import me.monst.particleguides.command.Permission;
 import me.monst.particleguides.command.Permissions;
-import me.monst.particleguides.command.PlayerExecutable;
+import me.monst.particleguides.configuration.values.Colors;
+import me.monst.particleguides.particle.ParticleService;
+import me.monst.pluginutil.command.Arguments;
+import me.monst.pluginutil.command.Command;
+import me.monst.pluginutil.command.Permission;
+import me.monst.pluginutil.command.exception.CommandExecutionException;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Collections;
 import java.util.List;
 
-class GuideHome implements PlayerExecutable {
+class GuideHome implements Command {
     
-    private final ParticleGuidesPlugin plugin;
+    private final ParticleService particleService;
+    private final Colors colors;
     private final Essentials essentials;
     
-    GuideHome(ParticleGuidesPlugin plugin, Essentials essentials) {
-        this.plugin = plugin;
+    GuideHome(ParticleService particleService, Colors colors, Essentials essentials) {
+        this.particleService = particleService;
+        this.colors = colors;
         this.essentials = essentials;
     }
     
@@ -45,18 +50,17 @@ class GuideHome implements PlayerExecutable {
     }
     
     @Override
-    public void execute(Player player, List<String> args) throws CommandExecutionException {
+    public void execute(CommandSender sender, Arguments args) throws CommandExecutionException {
+        Player player = Command.playerOnly(sender);
         if (!essentials.isEnabled())
-            throw new CommandExecutionException("Essentials is not enabled.");
-        if (args.isEmpty())
-            throw new CommandExecutionException("You must specify a home.");
+            Command.fail("Essentials is not enabled.");
         
-        String homeName = args.get(0);
+        String homeName = args.first().orElseThrow(() -> new CommandExecutionException("You must specify a home."));
         Location home = getHome(player, homeName);
     
+        Color color = args.second().map(colors::get).orElseGet(colors::random);
         player.sendMessage(ChatColor.YELLOW + "Guiding you to '" + homeName + "'...");
-        Color color = plugin.config().colors.findColorOrRandom(args.size() == 1 ? null : args.get(1));
-        plugin.getParticleService().addGuide(player, home, color);
+        particleService.addGuide(player, home, color);
     }
     
     private Location getHome(Player player, String homeName) throws CommandExecutionException {
@@ -67,17 +71,17 @@ class GuideHome implements PlayerExecutable {
                     return home;
             } catch (Exception ignored) {}
         }
-        throw new CommandExecutionException("You do not have a home named " + homeName + ".");
+        throw Command.fail("You do not have a home named " + homeName + ".");
     }
     
     @Override
-    public List<String> getTabCompletions(Player player, List<String> args) {
+    public List<String> getTabCompletions(Player player, Arguments args) {
         if (!essentials.isEnabled())
             return Collections.emptyList();
         if (args.size() == 1)
             return essentials.getUser(player).getHomes();
         if (args.size() == 2)
-            return plugin.config().colors.searchColors(args.get(1));
+            return args.second().map(colors::search).orElseGet(colors::names);
         return Collections.emptyList();
     }
     

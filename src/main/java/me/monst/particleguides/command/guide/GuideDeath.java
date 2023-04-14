@@ -1,25 +1,30 @@
 package me.monst.particleguides.command.guide;
 
-import me.monst.particleguides.ParticleGuidesPlugin;
-import me.monst.particleguides.command.CommandExecutionException;
-import me.monst.particleguides.command.Permission;
 import me.monst.particleguides.command.Permissions;
-import me.monst.particleguides.command.PlayerExecutable;
+import me.monst.particleguides.configuration.values.Colors;
+import me.monst.particleguides.particle.ParticleService;
+import me.monst.pluginutil.command.Arguments;
+import me.monst.pluginutil.command.Command;
+import me.monst.pluginutil.command.Permission;
+import me.monst.pluginutil.command.exception.CommandExecutionException;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-class GuideDeath implements PlayerExecutable {
+class GuideDeath implements Command {
     
-    private final ParticleGuidesPlugin plugin;
+    private final ParticleService particleService;
+    private final Colors colors;
     
-    GuideDeath(ParticleGuidesPlugin plugin) {
-        this.plugin = plugin;
+    GuideDeath(ParticleService particleService, Colors colors) {
+        this.colors = colors;
+        this.particleService = particleService;
     }
     
     @Override
@@ -43,23 +48,24 @@ class GuideDeath implements PlayerExecutable {
     }
     
     @Override
-    public void execute(Player player, List<String> args) throws CommandExecutionException {
+    public void execute(CommandSender sender, Arguments args) throws CommandExecutionException {
+        Player player = Command.playerOnly(sender);
         Location lastDeath = player.getLastDeathLocation();
         if (lastDeath == null || lastDeath.getWorld() == null)
-            throw new CommandExecutionException("No death location found.");
+            Command.fail("No death location found.");
         if (!Objects.equals(lastDeath.getWorld(), player.getWorld()))
-            throw new CommandExecutionException("Death location is in world '" + lastDeath.getWorld().getName() + "'.");
+            Command.fail("Death location is in world '" + lastDeath.getWorld().getName() + "'.");
     
+        Color color = args.first().map(colors::get).orElseGet(colors::random);
         player.sendMessage(ChatColor.YELLOW + "Guiding you to your last death...");
-        Color color = plugin.config().colors.findColorOrRandom(args.isEmpty() ? null : args.get(0));
-        plugin.getParticleService().addGuide(player, lastDeath, color);
+        particleService.addGuide(player, lastDeath, color);
     }
     
     @Override
-    public List<String> getTabCompletions(Player player, List<String> args) {
+    public List<String> getTabCompletions(Player player, Arguments args) {
         if (args.size() > 1)
             return Collections.emptyList();
-        return plugin.config().colors.searchColors(args.get(0));
+        return args.first().map(colors::search).orElseGet(colors::names);
     }
     
 }

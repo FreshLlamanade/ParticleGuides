@@ -1,8 +1,9 @@
 package me.monst.particleguides.particle;
 
 import me.monst.particleguides.ParticleGuidesPlugin;
-import me.monst.particleguides.command.CommandExecutionException;
 import me.monst.particleguides.command.Permissions;
+import me.monst.pluginutil.command.Command;
+import me.monst.pluginutil.command.exception.CommandExecutionException;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -52,7 +53,7 @@ public class ParticleService {
         List<ParticleGuide> guides = playerGuideMap.computeIfAbsent(player.getUniqueId(), k -> new LinkedList<>());
         guides.removeIf(ParticleGuide::isStopped);
         if (guides.size() >= Permissions.GUIDE.getPermissionLimitInt(player).orElse(0))
-            throw new CommandExecutionException("You have reached the maximum number of guides you can have at once.");
+            Command.fail("You have reached the maximum number of guides you can have at once.");
         plugin.getServer().getScheduler().runTaskAsynchronously(plugin, guide);
         guides.add(guide);
     }
