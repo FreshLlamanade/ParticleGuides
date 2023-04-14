@@ -2,13 +2,13 @@ package me.monst.particleguides.command.guide;
 
 import me.monst.particleguides.command.Permissions;
 import me.monst.particleguides.configuration.values.Colors;
+import me.monst.particleguides.particle.NamedColor;
 import me.monst.particleguides.particle.ParticleService;
 import me.monst.pluginutil.command.Arguments;
 import me.monst.pluginutil.command.Command;
 import me.monst.pluginutil.command.Permission;
 import me.monst.pluginutil.command.exception.CommandExecutionException;
 import org.bukkit.ChatColor;
-import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -56,9 +56,9 @@ class GuideDeath implements Command {
         if (!Objects.equals(lastDeath.getWorld(), player.getWorld()))
             Command.fail("Death location is in world '" + lastDeath.getWorld().getName() + "'.");
     
-        Color color = args.first().map(colors::get).orElseGet(colors::random);
-        player.sendMessage(ChatColor.YELLOW + "Guiding you to your last death...");
-        particleService.addGuide(player, lastDeath, color);
+        NamedColor color = args.first().map(colors::get).orElseGet(colors::random);
+        player.sendMessage(ChatColor.YELLOW + "Guiding you to your last death location in " + color.getName() + "...");
+        particleService.addGuide(player, lastDeath, color.getColor());
     }
     
     @Override

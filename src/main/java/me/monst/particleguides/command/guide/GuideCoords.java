@@ -2,13 +2,13 @@ package me.monst.particleguides.command.guide;
 
 import me.monst.particleguides.command.Permissions;
 import me.monst.particleguides.configuration.values.Colors;
+import me.monst.particleguides.particle.NamedColor;
 import me.monst.particleguides.particle.ParticleService;
 import me.monst.pluginutil.command.Arguments;
 import me.monst.pluginutil.command.Command;
 import me.monst.pluginutil.command.Permission;
 import me.monst.pluginutil.command.exception.CommandExecutionException;
 import org.bukkit.ChatColor;
-import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
@@ -55,9 +55,9 @@ class GuideCoords implements Command {
         int y = args.second().tryMap(this::parseCoordinate).expect("Please specify the y and z coordinates to locate.");
         int z = args.third().tryMap(this::parseCoordinate).expect("Please specify the z coordinate to locate.");
         Location coordinates = new Location(player.getWorld(), x + 0.5, y + 0.5, z + 0.5);
-        Color color = args.fourth().map(colors::get).orElseGet(colors::random);
-        player.sendMessage(ChatColor.YELLOW + "Guiding you to coordinates " + x + ", " + y + ", " + z + "...");
-        particleService.addGuide(player, coordinates, color);
+        NamedColor color = args.fourth().map(colors::get).orElseGet(colors::random);
+        player.sendMessage(ChatColor.YELLOW + "Guiding you to coordinates " + x + ", " + y + ", " + z + " in " + color.getName() + "...");
+        particleService.addGuide(player, coordinates, color.getColor());
     }
     
     private int parseCoordinate(String arg) throws CommandExecutionException {

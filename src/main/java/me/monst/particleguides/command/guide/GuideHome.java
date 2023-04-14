@@ -3,13 +3,13 @@ package me.monst.particleguides.command.guide;
 import com.earth2me.essentials.Essentials;
 import me.monst.particleguides.command.Permissions;
 import me.monst.particleguides.configuration.values.Colors;
+import me.monst.particleguides.particle.NamedColor;
 import me.monst.particleguides.particle.ParticleService;
 import me.monst.pluginutil.command.Arguments;
 import me.monst.pluginutil.command.Command;
 import me.monst.pluginutil.command.Permission;
 import me.monst.pluginutil.command.exception.CommandExecutionException;
 import org.bukkit.ChatColor;
-import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -58,9 +58,9 @@ class GuideHome implements Command {
         String homeName = args.first().orElseThrow(() -> new CommandExecutionException("You must specify a home."));
         Location home = getHome(player, homeName);
     
-        Color color = args.second().map(colors::get).orElseGet(colors::random);
-        player.sendMessage(ChatColor.YELLOW + "Guiding you to '" + homeName + "'...");
-        particleService.addGuide(player, home, color);
+        NamedColor color = args.second().map(colors::get).orElseGet(colors::random);
+        player.sendMessage(ChatColor.YELLOW + "Guiding you to '" + homeName + "' in " + color.getName() + "...");
+        particleService.addGuide(player, home, color.getColor());
     }
     
     private Location getHome(Player player, String homeName) throws CommandExecutionException {

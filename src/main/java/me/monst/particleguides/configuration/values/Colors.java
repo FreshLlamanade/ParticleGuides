@@ -2,7 +2,9 @@ package me.monst.particleguides.configuration.values;
 
 import me.monst.particleguides.configuration.transform.ColorTransformer;
 import me.monst.particleguides.configuration.transform.StringTransformer;
+import me.monst.particleguides.particle.NamedColor;
 import me.monst.pluginutil.configuration.ConfigurationValue;
+import me.monst.pluginutil.configuration.transform.BoundedTransformer;
 import me.monst.pluginutil.configuration.transform.MapTransformer;
 import me.monst.pluginutil.configuration.validation.Bound;
 import org.bukkit.Color;
@@ -15,8 +17,11 @@ public class Colors extends ConfigurationValue<Map<String, Color>> {
     public Colors() {
         super("colors",
                 getDefaultColorOptions(),
-                new MapTransformer<>(HashMap::new, new StringTransformer(), new ColorTransformer())
-                        .bounded(Bound.disallowing(Map::isEmpty, empty -> onlyWhite())));
+                new BoundedTransformer<>(
+                        new MapTransformer<>(HashMap::new, new StringTransformer(), new ColorTransformer()),
+                        Bound.disallowing(Map::isEmpty, empty -> onlyWhite())
+                )
+        );
     }
     
     private static Map<String, Color> getDefaultColorOptions() {
@@ -40,18 +45,20 @@ public class Colors extends ConfigurationValue<Map<String, Color>> {
     }
     
     private static Map<String, Color> onlyWhite() {
-        Map<String, Color> onlyWhite = new HashMap<>();
-        onlyWhite.put("white", Color.WHITE);
-        return onlyWhite;
+        return Collections.singletonMap("white", Color.WHITE);
     }
     
-    public Color get(String name) {
-        return get().get(name);
+    public NamedColor get(String name) {
+        name = name.toLowerCase();
+        Color color = get().get(name);
+        return new NamedColor(name, color);
     }
     
-    public Color random() {
-        Collection<Color> colors = get().values();
-        return colors.stream().skip((int) (colors.size() * Math.random())).findFirst().orElse(Color.WHITE);
+    public NamedColor random() {
+        return get().entrySet().stream()
+                .skip((int) (get().size() * Math.random())).findFirst()
+                .map(entry -> new NamedColor(entry.getKey(), entry.getValue()))
+                .orElseGet(() -> new NamedColor("white", Color.WHITE));
     }
     
     public List<String> search(String search) {

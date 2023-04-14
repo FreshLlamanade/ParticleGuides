@@ -2,6 +2,7 @@ package me.monst.particleguides.command.guide;
 
 import me.monst.particleguides.command.Permissions;
 import me.monst.particleguides.configuration.values.Colors;
+import me.monst.particleguides.particle.NamedColor;
 import me.monst.particleguides.particle.ParticleService;
 import me.monst.pluginutil.command.Arguments;
 import me.monst.pluginutil.command.Command;
@@ -9,7 +10,6 @@ import me.monst.pluginutil.command.Permission;
 import me.monst.pluginutil.command.exception.CommandExecutionException;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Color;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
@@ -59,10 +59,10 @@ class GuidePlayer implements Command {
             Command.fail("We all need a little guidance sometimes...");
         if (!Objects.equals(target.getWorld(), player.getWorld()))
             Command.fail("That player is currently in a different world.");
-        
-        Color color = args.second().map(colors::get).orElseGet(colors::random);
-        player.sendMessage(ChatColor.YELLOW + "Guiding you to " + target.getName() + "...");
-        particleService.addGuide(player, target, color);
+    
+        NamedColor color = args.second().map(colors::get).orElseGet(colors::random);
+        player.sendMessage(ChatColor.YELLOW + "Guiding you to " + target.getName() + " in " + color.getName() + "...");
+        particleService.addGuide(player, target, color.getColor());
     }
     
     private Player findPlayer(String name) throws CommandExecutionException {

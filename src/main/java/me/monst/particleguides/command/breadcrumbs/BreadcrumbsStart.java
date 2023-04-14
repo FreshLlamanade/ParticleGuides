@@ -1,12 +1,12 @@
 package me.monst.particleguides.command.breadcrumbs;
 
 import me.monst.particleguides.configuration.values.Colors;
+import me.monst.particleguides.particle.NamedColor;
 import me.monst.particleguides.particle.ParticleService;
 import me.monst.pluginutil.command.Arguments;
 import me.monst.pluginutil.command.Command;
 import me.monst.pluginutil.command.exception.CommandExecutionException;
 import org.bukkit.ChatColor;
-import org.bukkit.Color;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -41,9 +41,9 @@ class BreadcrumbsStart implements Command {
     @Override
     public void execute(CommandSender sender, Arguments args) throws CommandExecutionException {
         Player player = Command.playerOnly(sender);
-        Color color = args.first().map(colors::get).orElseGet(colors::random);
-        player.sendMessage(ChatColor.YELLOW + "Starting breadcrumbs...");
-        particleService.addBreadcrumbs(player, color);
+        NamedColor color = args.first().map(colors::get).orElseGet(colors::random);
+        player.sendMessage(ChatColor.YELLOW + "Starting breadcrumbs in " + color.getName() + "...");
+        particleService.addBreadcrumbs(player, color.getColor());
     }
     
     @Override
