@@ -64,7 +64,7 @@ class GuideCoords implements Command {
         try {
             return Integer.parseInt(arg);
         } catch (NumberFormatException e) {
-            throw Command.exception(arg + " is not a valid coordinate.");
+            throw Command.fail(arg + " is not a valid coordinate.");
         }
     }
     
