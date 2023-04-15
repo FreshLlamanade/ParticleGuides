@@ -10,7 +10,7 @@ public class ColorTransformer implements Transformer<Color> {
     public Color parse(String input) throws ArgumentParseException {
         try {
             return Color.fromRGB(Integer.parseInt(input, 16));
-        } catch (NumberFormatException e) {
+        } catch (IllegalArgumentException e) {
             throw new ArgumentParseException("Invalid RGB color hex code.");
         }
     }
