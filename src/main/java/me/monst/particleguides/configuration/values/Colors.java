@@ -1,7 +1,6 @@
 package me.monst.particleguides.configuration.values;
 
 import me.monst.particleguides.configuration.transform.ColorTransformer;
-import me.monst.particleguides.configuration.transform.StringTransformer;
 import me.monst.particleguides.particle.NamedColor;
 import me.monst.pluginutil.configuration.ConfigurationValue;
 import me.monst.pluginutil.configuration.transform.BoundedTransformer;
@@ -18,7 +17,7 @@ public class Colors extends ConfigurationValue<Map<String, Color>> {
         super("colors",
                 getDefaultColorOptions(),
                 new BoundedTransformer<>(
-                        new MapTransformer<>(HashMap::new, new StringTransformer(), new ColorTransformer()),
+                        new MapTransformer<>(HashMap::new, name -> name, new ColorTransformer()),
                         Bound.disallowing(Map::isEmpty, empty -> onlyWhite())
                 )
         );
