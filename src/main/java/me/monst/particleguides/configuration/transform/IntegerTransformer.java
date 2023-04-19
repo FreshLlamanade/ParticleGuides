@@ -5,7 +5,6 @@ import me.monst.pluginutil.configuration.exception.ArgumentParseException;
 import me.monst.pluginutil.configuration.exception.UnreadableValueException;
 import me.monst.pluginutil.configuration.exception.ValueOutOfBoundsException;
 import me.monst.pluginutil.configuration.transform.Transformer;
-import me.monst.pluginutil.configuration.validation.Bound;
 
 public class IntegerTransformer implements Transformer<Integer> {
     
