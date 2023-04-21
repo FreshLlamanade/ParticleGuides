@@ -44,6 +44,10 @@ be shown per dot, and the longer the dots will be visible. The default value is 
 - `highlight-density`: The density, or opacity, of a target being highlighted with particles. The higher the number, the 
 more particles will be shown around the target, and the longer the highlighting will be visible. The default value is 20.
 
+- `always-highlight-target`: If true, a puff of particles will be spawned around the target of a guide every time the
+guide is shown, regardless of distance away. If false, the puff will only be shown when the player is close enough 
+for the guide to reach the target.
+
 - `repeat-delay-millis`: The delay, in milliseconds, between repetitions of the particle effect. The higher the number, the 
 less frequently the particles will be shown. The default value is 1500 milliseconds.
 
