@@ -1,5 +1,6 @@
 package me.monst.particleguides.command.guide;
 
+import me.monst.particleguides.ParticleGuidesPlugin;
 import me.monst.particleguides.command.Permissions;
 import me.monst.particleguides.configuration.values.Colors;
 import me.monst.particleguides.particle.NamedColor;
@@ -10,8 +11,10 @@ import me.monst.pluginutil.command.Permission;
 import me.monst.pluginutil.command.exception.CommandExecutionException;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.StringUtil;
 
 import java.util.Collections;
@@ -21,10 +24,12 @@ import java.util.stream.Collectors;
 
 class GuidePlayer implements Command {
     
+    private final ParticleGuidesPlugin plugin;
     private final ParticleService particleService;
     private final Colors colors;
     
-    GuidePlayer(ParticleService particleService, Colors colors) {
+    GuidePlayer(ParticleGuidesPlugin plugin, ParticleService particleService, Colors colors) {
+        this.plugin = plugin;
         this.particleService = particleService;
         this.colors = colors;
     }
@@ -57,8 +62,14 @@ class GuidePlayer implements Command {
                 .expect("Please specify the name of the player to locate.");
         if (target.equals(player))
             Command.fail("We all need a little guidance sometimes...");
+        if (plugin.hasEssentials() && plugin.getEssentials().getUser(player).isVanished())
+            Command.fail("Player not found.");
         if (!Objects.equals(target.getWorld(), player.getWorld()))
             Command.fail("That player is currently in a different world.");
+        if (player.getGameMode() == GameMode.SPECTATOR)
+            Command.fail("That player is currently in spectator mode.");
+        if (player.isInvisible() || player.hasPotionEffect(PotionEffectType.INVISIBILITY))
+            Command.fail("That player is currently invisible.");
     
         NamedColor color = args.second().map(colors::get).orElseGet(colors::random);
         player.sendMessage(ChatColor.YELLOW + "Guiding you to " + target.getName() + " in " + color.getName() + "...");

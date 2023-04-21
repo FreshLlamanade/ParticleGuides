@@ -16,11 +16,13 @@ public class ParticleGuidesPlugin extends JavaPlugin {
     
     private final Configuration configuration = new Configuration(this);
     private final ParticleService particleService = new ParticleService(this);
+    private Essentials essentials;
     
     @Override
     public void onEnable() {
+        this.essentials = findEssentials();
         new CommandRegisterService(this).register(
-                new GuideCommand(this, findEssentials()),
+                new GuideCommand(this),
                 new BreadcrumbsCommand(this),
                 new ParticleGuidesCommand(this)
         );
@@ -40,6 +42,14 @@ public class ParticleGuidesPlugin extends JavaPlugin {
     
     public ParticleService getParticleService() {
         return particleService;
+    }
+    
+    public boolean hasEssentials() {
+        return essentials != null && essentials.isEnabled();
+    }
+    
+    public Essentials getEssentials() {
+        return essentials;
     }
     
 }

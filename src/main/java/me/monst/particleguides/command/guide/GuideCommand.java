@@ -10,7 +10,7 @@ import me.monst.pluginutil.command.SimpleCommandDelegator;
 
 public class GuideCommand extends SimpleCommandDelegator {
     
-    public GuideCommand(ParticleGuidesPlugin plugin, Essentials essentials) {
+    public GuideCommand(ParticleGuidesPlugin plugin) {
         super(
                 "guide",
                 "Create a particle trail which guides you to a specified location.",
@@ -21,9 +21,9 @@ public class GuideCommand extends SimpleCommandDelegator {
         addSubCommand(new GuideCoords(particleService, colors));
         addSubCommand(new GuideDeath(particleService, colors));
         addSubCommand(new GuideHere(particleService, colors));
-        if (essentials != null)
-            addSubCommand(new GuideHome(particleService, colors, essentials));
-        addSubCommand(new GuidePlayer(particleService, colors));
+        if (plugin.hasEssentials())
+            addSubCommand(new GuideHome(particleService, colors, plugin.getEssentials()));
+        addSubCommand(new GuidePlayer(plugin, particleService, colors));
         addSubCommand(new GuideStop(particleService));
     }
     

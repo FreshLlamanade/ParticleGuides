@@ -5,11 +5,12 @@ import me.monst.particleguides.command.Permissions;
 import me.monst.pluginutil.command.Command;
 import me.monst.pluginutil.command.exception.CommandExecutionException;
 import org.bukkit.Color;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
-import java.util.function.Supplier;
 
 public class ParticleService {
     
@@ -45,8 +46,19 @@ public class ParticleService {
     }
     
     public void addGuide(Player player, Player target, Color color) throws CommandExecutionException {
-        Supplier<Location> targetLocationSupplier = () -> target.isOnline() ? target.getLocation() : null;
-        addGuide(player, new MovingTargetParticleGuide(plugin, player, targetLocationSupplier, color));
+        addGuide(player, new MovingTargetParticleGuide(plugin, player, () -> locate(target), color));
+    }
+    
+    private Location locate(Player player) {
+        if (!player.isOnline())
+            return null;
+        if (player.isInvisible() || player.hasPotionEffect(PotionEffectType.INVISIBILITY))
+            return null;
+        if (player.getGameMode() == GameMode.SPECTATOR)
+            return null;
+        if (plugin.hasEssentials() && plugin.getEssentials().getUser(player).isVanished())
+            return null;
+        return player.getLocation();
     }
     
     private void addGuide(Player player, ParticleGuide guide) throws CommandExecutionException {

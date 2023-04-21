@@ -52,14 +52,12 @@ class GuideHome implements Command {
     @Override
     public void execute(CommandSender sender, Arguments args) throws CommandExecutionException {
         Player player = Command.playerOnly(sender);
-        if (!essentials.isEnabled())
-            Command.fail("Essentials is not enabled.");
-        
-        String homeName = args.first().orElseThrow(() -> new CommandExecutionException("You must specify a home."));
-        Location home = getHome(player, homeName);
+        Location home = args.first()
+                .map(name -> getHome(player, name))
+                .expect("You must specify a home.");
     
         NamedColor color = args.second().map(colors::get).orElseGet(colors::random);
-        player.sendMessage(ChatColor.YELLOW + "Guiding you to '" + homeName + "' in " + color.getName() + "...");
+        player.sendMessage(ChatColor.YELLOW + "Guiding you to '" + args.first().get() + "' in " + color.getName() + "...");
         particleService.addGuide(player, home, color.getColor());
     }
     
@@ -71,7 +69,7 @@ class GuideHome implements Command {
                     return home;
             } catch (Exception ignored) {}
         }
-        throw Command.fail("You do not have a home named " + homeName + ".");
+        throw Command.fail("You do not have a home named '" + homeName + "'.");
     }
     
     @Override
