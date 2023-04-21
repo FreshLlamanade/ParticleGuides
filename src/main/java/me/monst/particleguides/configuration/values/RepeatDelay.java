@@ -10,7 +10,7 @@ public class RepeatDelay extends ConfigurationValue<Integer> {
     public RepeatDelay() {
         super("repeat-delay-millis", 1500, new BoundedTransformer<>(
                 new IntegerTransformer(),
-                Bound.atLeast(0)
+                Bound.atLeast(1)
         ));
     }
     

@@ -51,9 +51,9 @@ class GuideCoords implements Command {
     @Override
     public void execute(CommandSender sender, Arguments args) throws CommandExecutionException {
         Player player = Command.playerOnly(sender);
-        int x = args.first().tryMap(this::parseCoordinate).expect("Please specify the x, y, and z coordinates to locate.");
-        int y = args.second().tryMap(this::parseCoordinate).expect("Please specify the y and z coordinates to locate.");
-        int z = args.third().tryMap(this::parseCoordinate).expect("Please specify the z coordinate to locate.");
+        int x = args.first().map(this::parseCoordinate).expect("Please specify the x, y, and z coordinates to locate.");
+        int y = args.second().map(this::parseCoordinate).expect("Please specify the y and z coordinates to locate.");
+        int z = args.third().map(this::parseCoordinate).expect("Please specify the z coordinate to locate.");
         Location coordinates = new Location(player.getWorld(), x + 0.5, y + 0.5, z + 0.5);
         NamedColor color = args.fourth().map(colors::get).orElseGet(colors::random);
         player.sendMessage(ChatColor.YELLOW + "Guiding you to coordinates " + x + ", " + y + ", " + z + " in " + color.getName() + "...");

@@ -53,7 +53,7 @@ class GuidePlayer implements Command {
     public void execute(CommandSender sender, Arguments args) throws CommandExecutionException {
         Player player = Command.playerOnly(sender);
         Player target = args.first()
-                .tryMap(this::findPlayer)
+                .map(this::findPlayer)
                 .expect("Please specify the name of the player to locate.");
         if (target.equals(player))
             Command.fail("We all need a little guidance sometimes...");

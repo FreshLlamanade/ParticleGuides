@@ -2,6 +2,7 @@ package me.monst.particleguides.configuration.values;
 
 import me.monst.particleguides.configuration.transform.ColorTransformer;
 import me.monst.particleguides.particle.NamedColor;
+import me.monst.pluginutil.command.exception.CommandExecutionException;
 import me.monst.pluginutil.configuration.ConfigurationValue;
 import me.monst.pluginutil.configuration.transform.BoundedTransformer;
 import me.monst.pluginutil.configuration.transform.MapTransformer;
@@ -47,9 +48,11 @@ public class Colors extends ConfigurationValue<Map<String, Color>> {
         return Collections.singletonMap("white", Color.WHITE);
     }
     
-    public NamedColor get(String name) {
+    public NamedColor get(String name) throws CommandExecutionException {
         name = name.toLowerCase();
         Color color = get().get(name);
+        if (color == null)
+            throw new CommandExecutionException("'" + name + "' is not a valid color.");
         return new NamedColor(name, color);
     }
     

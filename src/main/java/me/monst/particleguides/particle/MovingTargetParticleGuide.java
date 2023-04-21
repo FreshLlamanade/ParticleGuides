@@ -4,7 +4,6 @@ import me.monst.particleguides.ParticleGuidesPlugin;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
 
 import java.util.function.Supplier;
 
@@ -28,33 +27,45 @@ public class MovingTargetParticleGuide extends ParticleGuide {
     @Override
     void show() {
         // Get the location where the player was initially standing
-        Location startLocation = getPlayerLocation();
-        for (int multiplier = 1; multiplier <= plugin.config().guideLength.get(); multiplier++) {
-            Location currentTargetLocation = this.target.get(); // Get the current target location
-            if (currentTargetLocation == null || differentWorlds(startLocation.getWorld(), currentTargetLocation.getWorld())) {
-                // Target is either in a different world or has completely disappeared, count up to automatically disable
+        final Location startLocation = getPlayerLocation();
+        for (int baseDistance = 1; baseDistance <= plugin.config().guideLength.get(); baseDistance++) {
+            // Get the current target location
+            Location targetLocation = target.get();
+            
+            // If the target has disappeared, count up to automatically disable
+            if (targetLocation == null || differentWorlds(startLocation.getWorld(), targetLocation.getWorld())) {
                 if (timesSinceTargetLastSeen++ >= GRACE_PERIOD)
                     stop();
+                return; // Don't spawn a particle
+            }
+            timesSinceTargetLastSeen = 0; // Reset the counter
+            
+            // Find the vector between the player's initial position and the target's current position
+            final Vector startToTarget = Vector.between(startLocation, targetLocation);
+            // Find the distance between the player's initial position and the target's current position
+            final double startToTargetDistance = startToTarget.length();
+            // Find the direction the player needs to move in from their initial position to reach the target
+            final Vector startToTargetDirection = startToTarget.divide(startToTargetDistance); // Normalize the vector so that it has a length of 1
+            // Find the distance the player did move in that direction (could be negative)
+            final double movedTowardsTarget = Vector.between(startLocation, getPlayerLocation()).dot(startToTargetDirection);
+            // Find the distance the next particle should be from the player's initial position
+            final double nextParticleDistance = baseDistance + movedTowardsTarget;
+            
+            // If the particle trail has reached within one block of the target (or passed it) then stop
+            if (nextParticleDistance > startToTargetDistance - 1) {
+                highlight(targetLocation); // Spawn a particle puff at the target location
                 return;
             }
-            timesSinceTargetLastSeen = 0;
-            if (startLocation.distance(currentTargetLocation) <= plugin.config().guideLength.get()) {
-                // If the player is within range, make a puff of particles around the target to highlight it
-                highlight(currentTargetLocation);
-                break;
-            }
-            // Get the direction between the player's initial position and the target's current position
-            Vector targetDirection = getVectorBetween(startLocation, currentTargetLocation).normalize();
-            // The player may have moved some from their initial position
-            Vector playerMoved = getVectorBetween(startLocation, getPlayerLocation());
-            // Get the distance the player moved in the direction of the where the target now is (could be negative)
-            double movedTowardsTarget = playerMoved.dot(targetDirection);
+            
             // Make sure the next particle's location is offset by the distance the player moved
             // This ensures that the player will always be able to see the guide, even when moving very fast
-            Location nextParticleLocation = startLocation.clone().add(targetDirection.multiply(multiplier + movedTowardsTarget));
-            spawnParticle(nextParticleLocation);
+            Location nextParticle = startToTargetDirection.multiply(nextParticleDistance).awayFrom(startLocation);
+            spawnParticle(nextParticle); // Spawn a particle at the next location
+            
             sleep(plugin.config().particleDelay.get());
         }
+        if (plugin.config().alwaysHighlightTarget.get())
+            highlight(target.get()); // Spawn a particle puff at the target location
     }
     
 }

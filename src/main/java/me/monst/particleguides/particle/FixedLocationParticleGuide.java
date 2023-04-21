@@ -4,7 +4,6 @@ import me.monst.particleguides.ParticleGuidesPlugin;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
 
 /**
  * A particle guide to a specific, unmoving location.
@@ -25,24 +24,37 @@ public class FixedLocationParticleGuide extends ParticleGuide {
             stop();
             return;
         }
+        
         // Represents the player's initial position, although the player could be moving this will stay the same
         final Location startLocation = getPlayerLocation();
-        if (startLocation.distance(target) <= plugin.config().guideLength.get()) {
-            // If the player is within range, make a puff of particles around the target to highlight it
-            highlight(target);
-            return;
-        }
-        // Find the direction between the player's initial position and the target
-        final Vector direction = getVectorBetween(startLocation, target).normalize();
-        for (int blocksAway = 1; blocksAway <= plugin.config().guideLength.get(); blocksAway++) {
+        // Find the vector between the player's initial position and the target
+        final Vector startToTarget = Vector.between(startLocation, target);
+        // Find the distance between the player's initial position and the target
+        final double startToTargetDistance = startToTarget.length();
+        // Find the direction the player needs to move in to reach the target
+        final Vector startToTargetDirection = startToTarget.divide(startToTargetDistance);
+        
+        // Spawn particles at every block between the player and the target
+        for (int baseDistance = 1; baseDistance <= plugin.config().guideLength.get(); baseDistance++) {
             // Get the distance the player has moved in the direction of the target (could be negative)
-            double movedTowardsTarget = getVectorBetween(startLocation, getPlayerLocation()).dot(direction);
+            double movedTowardsTarget = Vector.between(startLocation, getPlayerLocation()).dot(startToTargetDirection);
+            double nextParticleDistance = baseDistance + movedTowardsTarget;
+            
+            // If the particle trail has reached the target (or passed it) then stop
+            if (nextParticleDistance >= startToTargetDistance) {
+                highlight(target); // Spawn a particle puff at the target location
+                return;
+            }
+            
             // Make sure the next particle's location is offset by the distance the player moved
             // This ensures that the player will always be able to see the guide, even when moving very fast
-            Location nextParticleLocation = startLocation.clone().add(direction.clone().multiply(blocksAway + movedTowardsTarget));
-            spawnParticle(nextParticleLocation);
+            Location nextParticle = startToTargetDirection.multiply(nextParticleDistance).awayFrom(startLocation);
+            spawnParticle(nextParticle);
+            
             sleep(plugin.config().particleDelay.get());
         }
+        if (plugin.config().alwaysHighlightTarget.get())
+            highlight(target); // Spawn a particle puff at the target location
     }
     
 }

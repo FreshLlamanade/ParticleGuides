@@ -24,12 +24,7 @@ public class Breadcrumbs extends ParticleGuide {
         this.breadcrumbList = new ArrayList<>();
         this.breadcrumbIndexMap = new HashMap<>();
         this.interBreadcrumbDistance = plugin.config().blocksPerBreadcrumb.get();
-        dropBreadcrumb(new Breadcrumb(player.getLocation().getBlock()) {
-            @Override
-            void spawnParticle() {
-                Breadcrumbs.this.highlight(getParticleLocation());
-            }
-        });
+        dropBreadcrumb(new OriginBreadcrumb());
     }
     
     public void stepOnBlock(Block block) {
@@ -90,6 +85,17 @@ public class Breadcrumbs extends ParticleGuide {
                 continue;
             breadcrumb.spawnParticle();
             sleep(plugin.config().particleDelay.get());
+        }
+    }
+    
+    private final class OriginBreadcrumb extends Breadcrumb {
+        private OriginBreadcrumb() {
+            super(player.getLocation().getBlock());
+        }
+        
+        @Override
+        void spawnParticle() {
+            Breadcrumbs.this.highlight(getParticleLocation());
         }
     }
     

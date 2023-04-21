@@ -45,10 +45,10 @@ class ParticleGuidesConfig implements Command {
         configuration.load();
         ListIterator<String> iterator = args.asList().listIterator();
         ConfigurationNode targetNode = configuration.deepSearch(iterator);
-        String path = String.join(".", args.between(0, iterator.nextIndex()));
+        String path = args.between(0, iterator.nextIndex()).join(".");
         
         if (!(targetNode instanceof ConfigurationValue<?>))
-            Command.fail(path + " is not a configuration value.");
+            Command.fail("'" + path + "' is not a configuration value.");
         ConfigurationValue<?> configValue = (ConfigurationValue<?>) targetNode;
         
         String input = String.join(" ", args.between(iterator.nextIndex(), args.size()));
@@ -77,15 +77,15 @@ class ParticleGuidesConfig implements Command {
     public List<String> getTabCompletions(Player player, Arguments args) {
         ListIterator<String> iterator = args.asList().listIterator();
         ConfigurationNode targetNode = configuration.deepSearch(iterator);
-        if (targetNode instanceof ConfigurationBranch) {
-            if (iterator.nextIndex() < args.size() - 1) // If the search was cut short before the last argument
-                return Collections.emptyList(); // Then there must be a typo previously in the path
+        if (targetNode instanceof ConfigurationBranch && !iterator.hasNext()) {
             String lastArg = args.last().orElse("");
             return ((ConfigurationBranch) targetNode).getChildren().keySet().stream()
                     .filter(child -> containsIgnoreCase(child, lastArg))
                     .collect(Collectors.toList());
-        } else if (targetNode instanceof ConfigurationValue<?>)
-            return ((ConfigurationValue<?>) targetNode).getTabCompletions(player, args.between(iterator.nextIndex(), args.size()));
+        } else if (targetNode instanceof ConfigurationValue<?> && iterator.hasNext()) {
+            return ((ConfigurationValue<?>) targetNode).getTabCompletions(player,
+                    args.between(iterator.nextIndex(), args.size()));
+        }
         return Collections.emptyList();
     }
     

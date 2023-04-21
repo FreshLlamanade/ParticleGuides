@@ -3,7 +3,6 @@ package me.monst.particleguides.particle;
 import me.monst.particleguides.ParticleGuidesPlugin;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
 
 import java.util.Objects;
 
@@ -83,8 +82,4 @@ abstract class ParticleGuide implements Runnable {
         return !Objects.equals(world1, world2);
     }
     
-    static Vector getVectorBetween(Location from, Location to) {
-        return to.toVector().subtract(from.toVector());
-    }
-
 }

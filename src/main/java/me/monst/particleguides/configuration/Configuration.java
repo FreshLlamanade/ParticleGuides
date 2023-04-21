@@ -25,6 +25,8 @@ public class Configuration extends ConfigurationBranch {
     
     public final GlobalVisibility globalVisibility = addChild(new GlobalVisibility());
     
+    public final AlwaysHighlightTarget alwaysHighlightTarget = addChild(new AlwaysHighlightTarget());
+    
     public Configuration(ParticleGuidesPlugin plugin) {
         super("config.yml");
         this.file = new YamlFile(plugin, getKey()); // Create config.yml file
