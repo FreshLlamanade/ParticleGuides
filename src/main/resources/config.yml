@@ -8,6 +8,11 @@ particle-density: 5
 # will be shown around the target, and the longer the highlighting will be visible. The default value is 20.
 highlight-density: 20
 
+# If true, a puff of particles will be spawned around the target of a guide every time the guide is shown,
+# regardless of distance away. If false, the puff will only be shown when the player is close enough
+# for the guide to reach the target.
+always-highlight-target: false
+
 # The delay, in milliseconds, between repetitions of the particle effect. The higher the number, the less frequently
 # the particles will be shown. The default value is 1500 milliseconds.
 repeat-delay-millis: 1500
