@@ -41,7 +41,7 @@ public class GuideAcceptCommand extends GuideRequestResponseCommand {
         requester.sendMessage(ChatColor.GREEN + player.getName() + " has accepted your guide request.");
         
         requester.sendMessage(ChatColor.YELLOW + "Guiding you to " + player.getName() + " in " + color.getName() + "...");
-        particleService.addGuide(player, requester, color.getColor());
+        particleService.addGuide(requester, player, color.getColor());
     }
     
 }
