@@ -57,6 +57,10 @@ class GuideDeath implements Command {
             Command.fail("Death location is in world '" + lastDeath.getWorld().getName() + "'.");
     
         NamedColor color = args.first().map(colors::get).orElseGet(colors::random);
+        
+        if (particleService.hasMaximumGuides(player))
+            throw new OutOfGuidesException();
+        
         player.sendMessage(ChatColor.YELLOW + "Guiding you to your last death location in " + color.getName() + "...");
         particleService.addGuide(player, lastDeath, color.getColor());
     }

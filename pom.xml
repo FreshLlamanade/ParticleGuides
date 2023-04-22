@@ -6,7 +6,7 @@
 
     <groupId>me.monst</groupId>
     <artifactId>particleguides</artifactId>
-    <version>1.4.2</version>
+    <version>1.5.0</version>
 
     <name>ParticleGuides</name>
     <description>Highlight your way with a trail of particles!</description>
@@ -44,7 +44,7 @@
         <dependency>
             <groupId>me.monst</groupId>
             <artifactId>plugin-util</artifactId>
-            <version>1.4.8</version>
+            <version>1.4.10</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
@@ -84,7 +84,7 @@
                             <relocations>
                                 <relocation>
                                     <pattern>me.monst.pluginutil</pattern>
-                                    <shadedPattern>me.monst.survivalhaven.dependencies.pluginutil</shadedPattern>
+                                    <shadedPattern>me.monst.particleguides.dependencies.pluginutil</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>

@@ -55,8 +55,11 @@ class GuideHome implements Command {
         Location home = args.first()
                 .map(name -> getHome(player, name))
                 .expect("You must specify a home.");
-    
         NamedColor color = args.second().map(colors::get).orElseGet(colors::random);
+        
+        if (particleService.hasMaximumGuides(player))
+            throw new OutOfGuidesException();
+        
         player.sendMessage(ChatColor.YELLOW + "Guiding you to '" + args.first().get() + "' in " + color.getName() + "...");
         particleService.addGuide(player, home, color.getColor());
     }

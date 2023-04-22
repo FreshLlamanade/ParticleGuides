@@ -6,6 +6,7 @@ import me.monst.particleguides.particle.NamedColor;
 import me.monst.particleguides.particle.ParticleService;
 import me.monst.pluginutil.command.Arguments;
 import me.monst.pluginutil.command.Command;
+import me.monst.pluginutil.command.Input;
 import me.monst.pluginutil.command.Permission;
 import me.monst.pluginutil.command.exception.CommandExecutionException;
 import org.bukkit.ChatColor;
@@ -53,30 +54,22 @@ class GuideCoords implements Command {
         Player player = Command.playerOnly(sender);
         Block playerBlock = player.getLocation().getBlock();
         int x = args.first()
-                .map(arg -> parseCoordinate(arg, playerBlock.getX()))
+                .map(Input.toCoordinate(playerBlock.getX(), arg -> "'" + arg + "' is not a valid coordinate."))
                 .expect("Please specify the x, y, and z coordinates to locate.");
         int y = args.second()
-                .map(arg -> parseCoordinate(arg, playerBlock.getY()))
+                .map(Input.toCoordinate(playerBlock.getY(), arg -> "'" + arg + "' is not a valid coordinate."))
                 .expect("Please specify the y and z coordinates to locate.");
         int z = args.third()
-                .map(arg -> parseCoordinate(arg, playerBlock.getZ()))
+                .map(Input.toCoordinate(playerBlock.getZ(), arg -> "'" + arg + "' is not a valid coordinate."))
                 .expect("Please specify the z coordinate to locate.");
         Location coordinates = new Location(player.getWorld(), x + 0.5, y + 0.5, z + 0.5);
         NamedColor color = args.fourth().map(colors::get).orElseGet(colors::random);
+        
+        if (particleService.hasMaximumGuides(player))
+            throw new OutOfGuidesException();
+        
         player.sendMessage(ChatColor.YELLOW + "Guiding you to coordinates " + x + ", " + y + ", " + z + " in " + color.getName() + "...");
         particleService.addGuide(player, coordinates, color.getColor());
-    }
-    
-    private int parseCoordinate(String arg, int playerCoordinate) throws CommandExecutionException {
-        try {
-            if (!arg.startsWith("~")) // Not a relative coordinate
-                return Integer.parseInt(arg);
-            if (arg.length() == 1) // Relative coordinate with no offset
-                return playerCoordinate;
-            return playerCoordinate + Integer.parseInt(arg.substring(1));
-        } catch (NumberFormatException e) {
-            throw Command.fail(arg + " is not a valid coordinate.");
-        }
     }
     
     @Override

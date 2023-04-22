@@ -11,27 +11,32 @@ permissions:
         description: Allows a player access to the /guide coords command
         default: op
         children:
-          survivalhaven.guide: true
+          particleguides.guide: true
     particleguides.guide.death:
         description: Allows a player access to the /guide death command
         default: op
         children:
-          survivalhaven.guide: true
+          particleguides.guide: true
     particleguides.guide.here:
         description: Allows a player access to the /guide here command
         default: op
         children:
-          survivalhaven.guide: true
+          particleguides.guide: true
     particleguides.guide.home:
       description: Allows a player access to the /guide home command
       default: op
       children:
-        survivalhaven.guide: true
+        particleguides.guide: true
     particleguides.guide.player:
         description: Allows a player access to the /guide player command
         default: op
         children:
-          survivalhaven.guide: true
+          particleguides.guide: true
+    particleguides.guide.player.no-ask:
+        description: Allows a player to create a guide to another player without asking
+        default: op
+        children:
+          particleguides.guide.player: true
     particleguides.guide:
         description: Allows a player full access to the /guide command
         default: op
@@ -54,7 +59,7 @@ permissions:
         description: Allows a player full access to the plugin
         default: op
         children:
-          survivalhaven.guide: true
-          survivalhaven.guide.*: true
-          survivalhaven.breadcrumbs.*: true
-          survivalhaven.admin: true
+          particleguides.guide: true
+          particleguides.guide.*: true
+          particleguides.breadcrumbs.*: true
+          particleguides.admin: true

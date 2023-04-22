@@ -49,6 +49,10 @@ class GuideHere implements Command {
     public void execute(CommandSender sender, Arguments args) throws CommandExecutionException {
         Player player = Command.playerOnly(sender);
         NamedColor color = args.first().map(colors::get).orElseGet(colors::random);
+        
+        if (particleService.hasMaximumGuides(player))
+            throw new OutOfGuidesException();
+        
         player.sendMessage(ChatColor.YELLOW + "Guiding you to your current location in " + color.getName() + "...");
         particleService.addGuide(player, player.getLocation(), color.getColor());
     }

@@ -1,6 +1,5 @@
 package me.monst.particleguides.command.guide;
 
-import com.earth2me.essentials.Essentials;
 import me.monst.particleguides.ParticleGuidesPlugin;
 import me.monst.particleguides.command.Permissions;
 import me.monst.particleguides.configuration.values.Colors;

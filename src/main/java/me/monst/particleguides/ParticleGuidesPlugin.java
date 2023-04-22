@@ -2,7 +2,9 @@ package me.monst.particleguides;
 
 import com.earth2me.essentials.Essentials;
 import me.monst.particleguides.command.breadcrumbs.BreadcrumbsCommand;
+import me.monst.particleguides.command.guide.GuideAcceptCommand;
 import me.monst.particleguides.command.guide.GuideCommand;
+import me.monst.particleguides.command.guide.GuideDenyCommand;
 import me.monst.particleguides.command.plugin.ParticleGuidesCommand;
 import me.monst.particleguides.configuration.Configuration;
 import me.monst.particleguides.particle.BreadcrumbsListener;
@@ -23,6 +25,8 @@ public class ParticleGuidesPlugin extends JavaPlugin {
         this.essentials = findEssentials();
         new CommandRegisterService(this).register(
                 new GuideCommand(this),
+                new GuideAcceptCommand(particleService),
+                new GuideDenyCommand(particleService),
                 new BreadcrumbsCommand(this),
                 new ParticleGuidesCommand(this)
         );

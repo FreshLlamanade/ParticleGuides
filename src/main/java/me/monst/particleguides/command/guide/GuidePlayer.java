@@ -7,6 +7,7 @@ import me.monst.particleguides.particle.NamedColor;
 import me.monst.particleguides.particle.ParticleService;
 import me.monst.pluginutil.command.Arguments;
 import me.monst.pluginutil.command.Command;
+import me.monst.pluginutil.command.Input;
 import me.monst.pluginutil.command.Permission;
 import me.monst.pluginutil.command.exception.CommandExecutionException;
 import org.bukkit.Bukkit;
@@ -58,7 +59,7 @@ class GuidePlayer implements Command {
     public void execute(CommandSender sender, Arguments args) throws CommandExecutionException {
         Player player = Command.playerOnly(sender);
         Player target = args.first()
-                .map(this::findPlayer)
+                .map(Input.toPlayer(name -> "Player not found."))
                 .expect("Please specify the name of the player to locate.");
         if (target.equals(player))
             Command.fail("We all need a little guidance sometimes...");
@@ -72,15 +73,23 @@ class GuidePlayer implements Command {
             Command.fail("That player is currently invisible.");
     
         NamedColor color = args.second().map(colors::get).orElseGet(colors::random);
-        player.sendMessage(ChatColor.YELLOW + "Guiding you to " + target.getName() + " in " + color.getName() + "...");
-        particleService.addGuide(player, target, color.getColor());
-    }
-    
-    private Player findPlayer(String name) throws CommandExecutionException {
-        Player player = Bukkit.getServer().getPlayer(name);
-        if (player == null)
-            Command.fail("Player not found.");
-        return player;
+        
+        if (particleService.hasMaximumGuides(player))
+            throw new OutOfGuidesException();
+        
+        if (Permissions.GUIDE_PLAYER_NO_ASK.ownedBy(player)) {
+            player.sendMessage(ChatColor.YELLOW + "Guiding you to " + target.getName() + " in " + color.getName() + "...");
+            particleService.addGuide(player, target, color.getColor());
+            return;
+        }
+        
+        target.sendMessage(
+                ChatColor.YELLOW + player.getName() + " is requesting to create a guide to you.",
+                ChatColor.YELLOW + "To accept, use " + ChatColor.GREEN + "/guideaccept",
+                ChatColor.YELLOW + "To deny, use " + ChatColor.RED + "/guidedeny"
+        );
+        player.sendMessage(ChatColor.YELLOW + "Request sent to " + target.getName() + ".");
+        particleService.addGuideRequest(target, player, color);
     }
     
     @Override

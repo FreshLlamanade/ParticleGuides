@@ -10,6 +10,7 @@ public final class Permissions {
     public static final Permission GUIDE_COORDS = permission("guide.coords");
     public static final Permission GUIDE_DEATH = permission("guide.death");
     public static final Permission GUIDE_PLAYER = permission("guide.player");
+    public static final Permission GUIDE_PLAYER_NO_ASK = permission("guide.player.no-ask");
     public static final Permission GUIDE_HOME = permission("guide.home");
     public static final PermissionLimit BREADCRUMBS = permissionLimit("breadcrumbs");
     public static final Permission ADMIN = permission("admin");
