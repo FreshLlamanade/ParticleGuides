@@ -51,18 +51,29 @@ class GuideCoords implements Command {
     @Override
     public void execute(CommandSender sender, Arguments args) throws CommandExecutionException {
         Player player = Command.playerOnly(sender);
-        int x = args.first().map(this::parseCoordinate).expect("Please specify the x, y, and z coordinates to locate.");
-        int y = args.second().map(this::parseCoordinate).expect("Please specify the y and z coordinates to locate.");
-        int z = args.third().map(this::parseCoordinate).expect("Please specify the z coordinate to locate.");
+        Block playerBlock = player.getLocation().getBlock();
+        int x = args.first()
+                .map(arg -> parseCoordinate(arg, playerBlock.getX()))
+                .expect("Please specify the x, y, and z coordinates to locate.");
+        int y = args.second()
+                .map(arg -> parseCoordinate(arg, playerBlock.getY()))
+                .expect("Please specify the y and z coordinates to locate.");
+        int z = args.third()
+                .map(arg -> parseCoordinate(arg, playerBlock.getZ()))
+                .expect("Please specify the z coordinate to locate.");
         Location coordinates = new Location(player.getWorld(), x + 0.5, y + 0.5, z + 0.5);
         NamedColor color = args.fourth().map(colors::get).orElseGet(colors::random);
         player.sendMessage(ChatColor.YELLOW + "Guiding you to coordinates " + x + ", " + y + ", " + z + " in " + color.getName() + "...");
         particleService.addGuide(player, coordinates, color.getColor());
     }
     
-    private int parseCoordinate(String arg) throws CommandExecutionException {
+    private int parseCoordinate(String arg, int playerCoordinate) throws CommandExecutionException {
         try {
-            return Integer.parseInt(arg);
+            if (!arg.startsWith("~")) // Not a relative coordinate
+                return Integer.parseInt(arg);
+            if (arg.length() == 1) // Relative coordinate with no offset
+                return playerCoordinate;
+            return playerCoordinate + Integer.parseInt(arg.substring(1));
         } catch (NumberFormatException e) {
             throw Command.fail(arg + " is not a valid coordinate.");
         }
@@ -71,15 +82,11 @@ class GuideCoords implements Command {
     @Override
     public Iterable<?> getTabCompletions(Player player, Arguments args) {
         if (args.size() <= 3) {
-            List<Object> coordinateCompletions = new ArrayList<>(1);
-            Block block = player.getLocation().getBlock();
-            if (args.size() == 1)
-                coordinateCompletions.add(block.getX() + " " + block.getY() + " " + block.getZ());
-            else if (args.size() == 2)
-                coordinateCompletions.add(block.getY() + " " + block.getZ());
-            else
-                coordinateCompletions.add(block.getZ());
-            return coordinateCompletions;
+            List<String> completions = new ArrayList<>();
+            args.first().ifBlank(() -> completions.add("~ ~ ~"));
+            args.second().ifBlank(() -> completions.add("~ ~"));
+            args.third().ifBlank(() -> completions.add("~"));
+            return completions;
         }
         if (args.size() == 4)
             return args.fourth().map(colors::search).orElseGet(colors::names);
