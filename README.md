@@ -26,6 +26,7 @@ The following permissions are available to control access to the plugin:
 - `particleguides.guide.here` - Allows access to `/guide here` to specify the player's current location as a target.
 - `particleguides.guide.home` - Allows access to `/guide home` to specify one of the player's Essentials homes as a target.
 - `particleguides.guide.player` - Allows access to `/guide player` to specify another player as a target.
+- `particleguides.guide.player.no-ask` - Allows using `/guide player` without asking the target player for permission.
 - `particleguides.guide` - Allows full access to the `/guide` command and all subcommands.
 - `particleguides.guide.<limit>` - Allows the creation of `<limit>` guides at a time.
 - `particleguides.guide.*` - Allows the creation of an unlimited number of guides at a time.
