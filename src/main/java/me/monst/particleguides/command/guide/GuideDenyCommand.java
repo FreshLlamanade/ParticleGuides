@@ -2,6 +2,7 @@ package me.monst.particleguides.command.guide;
 
 import me.monst.particleguides.particle.ParticleService;
 import me.monst.pluginutil.command.Arguments;
+import me.monst.pluginutil.command.Command;
 import me.monst.pluginutil.command.exception.CommandExecutionException;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -30,8 +31,8 @@ public class GuideDenyCommand extends GuideRequestResponseCommand {
     
     @Override
     public void execute(CommandSender sender, Arguments args) throws CommandExecutionException {
-        Result result = processRequest(sender, args);
-        Player player = result.player;
+        Player player = Command.playerOnly(sender);
+        Result result = processRequest(player, args);
         Player requester = result.requester;
         
         player.sendMessage(ChatColor.YELLOW + "You have denied " + requester.getName() + "'s guide request.");

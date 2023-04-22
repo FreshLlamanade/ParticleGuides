@@ -6,7 +6,6 @@ import me.monst.pluginutil.command.Arguments;
 import me.monst.pluginutil.command.Command;
 import me.monst.pluginutil.command.Input;
 import me.monst.pluginutil.command.exception.CommandExecutionException;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Collections;
@@ -30,9 +29,7 @@ abstract class GuideRequestResponseCommand implements Command {
                 .collect(Collectors.toList());
     }
     
-    Result processRequest(CommandSender sender, Arguments args) throws CommandExecutionException {
-        Player player = Command.playerOnly(sender);
-        
+    Result processRequest(Player player, Arguments args) throws CommandExecutionException {
         Map<Player, NamedColor> requests = particleService.getIncomingRequests(player);
         if (requests.isEmpty())
             Command.fail("You have no incoming guide requests.");
@@ -46,16 +43,14 @@ abstract class GuideRequestResponseCommand implements Command {
         
         NamedColor color = requests.get(requester);
         particleService.removeRequest(player, requester);
-        return new Result(player, requester, color);
+        return new Result(requester, color);
     }
     
     static class Result {
-        public final Player player;
         public final Player requester;
         public final NamedColor color;
         
-        public Result(Player player, Player requester, NamedColor color) {
-            this.player = player;
+        public Result(Player requester, NamedColor color) {
             this.requester = requester;
             this.color = color;
         }
