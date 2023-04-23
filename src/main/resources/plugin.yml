@@ -7,6 +7,15 @@ softdepend:
   - Essentials
 
 permissions:
+  particleguides.guide:
+    description: Allows a player full access to the /guide command
+    default: true
+    children:
+      particleguides.guide.coords: true
+      particleguides.guide.death: true
+      particleguides.guide.here: true
+      particleguides.guide.home: true
+      particleguides.guide.player: true
   particleguides.guide.coords:
     description: Allows a player access to the /guide coords command
     default: true
@@ -27,17 +36,8 @@ permissions:
     default: op
     children:
       particleguides.guide.player: true
-  particleguides.guide:
-    description: Allows a player full access to the /guide command
-    default: true
-    children:
-      particleguides.guide.coords: true
-      particleguides.guide.death: true
-      particleguides.guide.here: true
-      particleguides.guide.home: true
-      particleguides.guide.player: true
   particleguides.guide.limit.*:
-    description: Adjust the maximum number of guides a player can create
+    description: Adjust the maximum number of guides a player can create at once
     default: op
   particleguides.breadcrumbs:
     description: Allows a player access to the /breadcrumbs command

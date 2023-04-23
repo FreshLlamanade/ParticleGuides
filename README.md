@@ -21,17 +21,19 @@ chosen from colors specified in the config.yml file.
 
 The following permissions are available to control access to the plugin:
 
+- `particleguides.guide` - Allows full access to the `/guide` command and all subcommands (default true).
 - `particleguides.guide.coords` - Allows access to `/guide coords` to specify coordinates as a target.
 - `particleguides.guide.death` - Allows access to `/guide death` to specify the player's last death location as a target.
 - `particleguides.guide.here` - Allows access to `/guide here` to specify the player's current location as a target.
 - `particleguides.guide.home` - Allows access to `/guide home` to specify one of the player's Essentials homes as a target.
 - `particleguides.guide.player` - Allows access to `/guide player` to specify another player as a target.
-- `particleguides.guide.player.no-ask` - Allows using `/guide player` without asking the target player for permission.
-- `particleguides.guide` - Allows full access to the `/guide` command and all subcommands.
-- `particleguides.guide.<limit>` - Allows the creation of `<limit>` guides at a time.
-- `particleguides.guide.*` - Allows the creation of an unlimited number of guides at a time.
-- `particleguides.breadcrumbs.<limit>` - Allows access to /breadcrumbs with a limit of `<limit>` dropped particles.
-- `particleguides.breadcrumbs.*` - Allows unlimited use of /breadcrumbs.
+- `particleguides.guide.player.no-ask` - Allows using `/guide player` without asking the target player for permission (default OP)
+- `particleguides.guide.limit.*` - Adjust the maximum number of guides a player can create at once.
+
+- `particleguides.breadcrumbs` - Allows access to `/breadcrumbs` to create a breadcrumb trail behind the player (default true).
+- `particleguides.breadcrumbs.limit.*` - Adjust the maximum length of a player's breadcrumb trail.
+
+- `particleguides.admin` - Allows access to `/particleguides` to manage the plugin's configuration (default OP).
 
 ## Configuration
 
