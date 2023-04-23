@@ -12,8 +12,7 @@ public class GuideCommand extends SimpleCommandDelegator {
     public GuideCommand(ParticleGuidesPlugin plugin) {
         super(
                 "guide",
-                "Create a particle trail which guides you to a specified location.",
-                "/guide <coords|death|here|home|player|stop>"
+                "Create a particle trail which guides you to a specified location."
         );
         ParticleService particleService = plugin.getParticleService();
         Colors colors = plugin.config().colors;
@@ -24,11 +23,6 @@ public class GuideCommand extends SimpleCommandDelegator {
             addSubCommand(new GuideHome(particleService, colors, plugin.getEssentials()));
         addSubCommand(new GuidePlayer(plugin, particleService, colors));
         addSubCommand(new GuideStop(particleService));
-    }
-    
-    @Override
-    public Permission getPermission() {
-        return Permissions.GUIDE;
     }
     
 }

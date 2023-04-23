@@ -61,7 +61,7 @@ public class Breadcrumbs extends ParticleGuide {
     }
     
     private int calculateMaxLength() {
-        return Permissions.BREADCRUMBS.getPermissionLimitInt(player).orElse(-1);
+        return Permissions.BREADCRUMBS_LIMIT.getPermissionLimitInt(player).orElse(Integer.MAX_VALUE);
     }
     
     private void dropBreadcrumb(Breadcrumb breadcrumb) {
@@ -78,7 +78,7 @@ public class Breadcrumbs extends ParticleGuide {
     @Override
     void show() {
         for (int i = breadcrumbList.size() - 1; i >= 0; i--) {
-            if (i >= breadcrumbList.size())
+            if (i >= breadcrumbList.size()) // Check if the list has been modified while we were iterating
                 return;
             Breadcrumb breadcrumb = breadcrumbList.get(i);
             if (differentWorlds(player.getWorld(), breadcrumb.getWorld()))

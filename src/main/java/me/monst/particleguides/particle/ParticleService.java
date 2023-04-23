@@ -65,9 +65,9 @@ public class ParticleService {
     }
     
     public boolean hasMaximumGuides(Player player) {
-        int max = Permissions.GUIDE.getPermissionLimitInt(player).orElse(0);
-        int actual = playerGuideMap.getOrDefault(player.getUniqueId(), Collections.emptyList()).size();
-        return actual >= max;
+        return Permissions.GUIDE_LIMIT.getPermissionLimitInt(player)
+                .map(limit -> playerGuideMap.getOrDefault(player.getUniqueId(), Collections.emptyList()).size() >= limit)
+                .orElse(false);
     }
     
     public void addGuide(Player player, Location target, Color color) {

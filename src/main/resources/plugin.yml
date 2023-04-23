@@ -9,19 +9,19 @@ softdepend:
 permissions:
   particleguides.guide.coords:
     description: Allows a player access to the /guide coords command
-    default: op
+    default: true
   particleguides.guide.death:
     description: Allows a player access to the /guide death command
-    default: op
+    default: true
   particleguides.guide.here:
     description: Allows a player access to the /guide here command
-    default: op
+    default: true
   particleguides.guide.home:
     description: Allows a player access to the /guide home command
-    default: op
+    default: true
   particleguides.guide.player:
     description: Allows a player access to the /guide player command
-    default: op
+    default: true
   particleguides.guide.player.no-ask:
     description: Allows a player to create a guide to another player without asking
     default: op
@@ -29,18 +29,21 @@ permissions:
       particleguides.guide.player: true
   particleguides.guide:
     description: Allows a player full access to the /guide command
-    default: op
+    default: true
     children:
       particleguides.guide.coords: true
       particleguides.guide.death: true
       particleguides.guide.here: true
       particleguides.guide.home: true
       particleguides.guide.player: true
-  particleguides.guide.*:
-    description: Allows a player to create an unlimited amount of guides at a time
+  particleguides.guide.limit.*:
+    description: Adjust the maximum number of guides a player can create
     default: op
-  particleguides.breadcrumbs.*:
-    description: Allows a player unlimited length access to the /breadcrumbs command
+  particleguides.breadcrumbs:
+    description: Allows a player access to the /breadcrumbs command
+    default: true
+  particleguides.breadcrumbs.limit.*:
+    description: Adjust the maximum length of a player's breadcrumb trail
     default: op
   particleguides.admin:
     description: Allows a player to manage the plugin
@@ -50,6 +53,6 @@ permissions:
     default: op
     children:
       particleguides.guide: true
-      particleguides.guide.*: true
-      particleguides.breadcrumbs.*: true
+      particleguides.guide.limit.*: true
+      particleguides.breadcrumbs.limit.*: true
       particleguides.admin: true

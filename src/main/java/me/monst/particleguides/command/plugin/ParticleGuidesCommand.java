@@ -11,7 +11,6 @@ public class ParticleGuidesCommand extends SimpleCommandDelegator {
         super(
                 "particleguides",
                 "Manage the plugin.",
-                "/particleguides <config>",
                 new ParticleGuidesConfig(plugin.config())
         );
     }
