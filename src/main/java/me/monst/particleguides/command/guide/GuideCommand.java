@@ -1,10 +1,8 @@
 package me.monst.particleguides.command.guide;
 
 import me.monst.particleguides.ParticleGuidesPlugin;
-import me.monst.particleguides.command.Permissions;
 import me.monst.particleguides.configuration.values.Colors;
 import me.monst.particleguides.particle.ParticleService;
-import me.monst.pluginutil.command.Permission;
 import me.monst.pluginutil.command.SimpleCommandDelegator;
 
 public class GuideCommand extends SimpleCommandDelegator {

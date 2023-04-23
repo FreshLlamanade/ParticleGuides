@@ -27,7 +27,7 @@ public class ParticleGuidesPlugin extends JavaPlugin {
                 new GuideAcceptCommand(particleService),
                 new GuideDenyCommand(particleService),
                 new BreadcrumbsCommand(this),
-                new ParticleGuidesCommand(this)
+                new ParticleGuidesCommand(configuration)
         );
         Bukkit.getPluginManager().registerEvents(new BreadcrumbsListener(particleService), this);
     }
