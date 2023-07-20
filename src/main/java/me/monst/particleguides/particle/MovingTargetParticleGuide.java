@@ -29,6 +29,9 @@ public class MovingTargetParticleGuide extends ParticleGuide {
         // Get the location where the player was initially standing
         final Location startLocation = getPlayerLocation();
         for (int baseDistance = 1; baseDistance <= plugin.config().guideLength.get(); baseDistance++) {
+            if (isStopped())
+                return;
+            
             // Get the current target location
             Location targetLocation = target.get();
             

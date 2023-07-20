@@ -36,6 +36,8 @@ public class FixedLocationParticleGuide extends ParticleGuide {
         
         // Spawn particles at every block between the player and the target
         for (int baseDistance = 1; baseDistance <= plugin.config().guideLength.get(); baseDistance++) {
+            if (isStopped())
+                return;
             // Get the distance the player has moved in the direction of the target (could be negative)
             double movedTowardsTarget = Vector.between(startLocation, getPlayerLocation()).dot(startToTargetDirection);
             double nextParticleDistance = baseDistance + movedTowardsTarget;
