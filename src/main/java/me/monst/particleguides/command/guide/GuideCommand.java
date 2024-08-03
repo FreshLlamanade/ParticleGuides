@@ -19,6 +19,8 @@ public class GuideCommand extends SimpleCommandDelegator {
         addSubCommand(new GuideHere(particleService, colors));
         if (plugin.hasEssentials())
             addSubCommand(new GuideHome(particleService, colors, plugin.getEssentials()));
+        if (plugin.hasDeutschLearnersPlugin())
+            addSubCommand(new GuideWaypoint(particleService, colors, plugin.getDeutschLearnersPlugin()));
         addSubCommand(new GuidePlayer(plugin, particleService, colors));
         addSubCommand(new GuideStop(particleService));
     }

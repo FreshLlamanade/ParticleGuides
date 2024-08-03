@@ -1,6 +1,7 @@
 package me.monst.particleguides;
 
 import com.earth2me.essentials.Essentials;
+import me.monst.deutschlearnersplugin.DeutschLearnersPlugin;
 import me.monst.particleguides.command.breadcrumbs.BreadcrumbsCommand;
 import me.monst.particleguides.command.guide.GuideAcceptCommand;
 import me.monst.particleguides.command.guide.GuideCommand;
@@ -39,6 +40,13 @@ public class ParticleGuidesPlugin extends JavaPlugin {
         return null;
     }
     
+    private DeutschLearnersPlugin findDeutschLearnersPlugin() {
+        Plugin plugin = getServer().getPluginManager().getPlugin("DeutschLearnersPlugin");
+        if (plugin instanceof DeutschLearnersPlugin)
+            return (DeutschLearnersPlugin) plugin;
+        return null;
+    }
+    
     public Configuration config() {
         return configuration;
     }
@@ -53,6 +61,14 @@ public class ParticleGuidesPlugin extends JavaPlugin {
     
     public Essentials getEssentials() {
         return essentials;
+    }
+    
+    public boolean hasDeutschLearnersPlugin() {
+        return findDeutschLearnersPlugin() != null;
+    }
+    
+    public DeutschLearnersPlugin getDeutschLearnersPlugin() {
+        return findDeutschLearnersPlugin();
     }
     
 }
