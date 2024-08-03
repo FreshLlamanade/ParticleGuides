@@ -1,5 +1,6 @@
 package me.monst.particleguides.command.breadcrumbs;
 
+import me.monst.particleguides.particle.ActiveBreadcrumbs;
 import me.monst.particleguides.particle.ParticleService;
 import me.monst.pluginutil.command.Arguments;
 import me.monst.pluginutil.command.Command;
@@ -8,34 +9,39 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-class BreadcrumbsStop implements Command {
+class BreadcrumbsPause implements Command {
     
     private final ParticleService particleService;
     
-    BreadcrumbsStop(ParticleService particleService) {
+    BreadcrumbsPause(ParticleService particleService) {
         this.particleService = particleService;
     }
     
     @Override
     public String getName() {
-        return "stop";
+        return "pause";
     }
     
     @Override
     public String getDescription() {
-        return "Stops all breadcrumbs.";
+        return "Pauses dropping breadcrumbs.";
     }
     
     @Override
     public String getUsage() {
-        return "/breadcrumbs stop";
+        return "/breadcrumbs pause";
     }
     
     @Override
     public void execute(CommandSender sender, Arguments args) throws CommandExecutionException {
         Player player = Command.playerOnly(sender);
-        player.sendMessage(ChatColor.YELLOW + "Breadcrumbs cleared.");
-        particleService.stopActiveBreadcrumbs(player);
+        ActiveBreadcrumbs breadcrumbs = particleService.getActiveBreadcrumbs(player);
+        if (breadcrumbs == null)
+            Command.fail("You are not currently dropping breadcrumbs.");
+        if (breadcrumbs.isPaused())
+            Command.fail("Your breadcrumbs are already paused. Did you mean /breadcrumbs resume?");
+        breadcrumbs.setPauseState(ActiveBreadcrumbs.PauseState.PAUSED);
+        player.sendMessage(ChatColor.YELLOW + "Breadcrumbs paused.");
     }
     
 }

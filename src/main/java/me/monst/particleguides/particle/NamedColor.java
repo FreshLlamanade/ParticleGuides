@@ -2,6 +2,9 @@ package me.monst.particleguides.particle;
 
 import org.bukkit.Color;
 
+/**
+ * A color with a name. This class is used to represent the colors configured in the plugin's config.yml.
+ */
 public class NamedColor {
 
     private final String name;

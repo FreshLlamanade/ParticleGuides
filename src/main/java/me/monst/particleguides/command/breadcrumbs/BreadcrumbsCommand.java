@@ -10,9 +10,11 @@ public class BreadcrumbsCommand extends SimpleCommandDelegator {
     public BreadcrumbsCommand(ParticleGuidesPlugin plugin) {
         super(
                 "breadcrumbs",
-                "Turn on/off breadcrumbs.",
+                "Manage breadcrumbs.",
                 new BreadcrumbsStart(plugin.getParticleService(), plugin.config().colors),
-                new BreadcrumbsStop(plugin.getParticleService())
+                new BreadcrumbsStop(plugin.getParticleService()),
+                new BreadcrumbsPause(plugin.getParticleService()),
+                new BreadcrumbsResume(plugin.getParticleService())
         );
     }
     

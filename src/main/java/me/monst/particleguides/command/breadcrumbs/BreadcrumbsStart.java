@@ -43,7 +43,7 @@ class BreadcrumbsStart implements Command {
         Player player = Command.playerOnly(sender);
         NamedColor color = args.first().map(colors::get).orElseGet(colors::random);
         player.sendMessage(ChatColor.YELLOW + "Starting breadcrumbs in " + color.getName() + "...");
-        particleService.addBreadcrumbs(player, color.getColor());
+        particleService.startActiveBreadcrumbs(player, color.getColor());
     }
     
     @Override

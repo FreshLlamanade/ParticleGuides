@@ -7,18 +7,14 @@ import org.bukkit.entity.Player;
 import java.util.Objects;
 
 /**
- * A particle guide is a recurring visual effect only visible to one player, for as long as they have it enabled.
- * It shows itself once every 1500ms, creating a trail of redstone dust particles leading away from the player
- * in the direction of a certain target. The target can be fixed or moving, and may disappear (for instance, if the
- * target is a player and enters a different dimension).
+ * A guide that shows particles to the player.
  */
 abstract class ParticleGuide implements Runnable {
     
     protected final ParticleGuidesPlugin plugin;
     protected final Player player;
-    private final Particle.DustOptions dustOptions;
-    
-    private boolean stopped;
+    protected final Particle.DustOptions dustOptions;
+    protected boolean isRunning;
     
     ParticleGuide(ParticleGuidesPlugin plugin, Player player, Color color) {
         this.plugin = plugin;
@@ -26,16 +22,24 @@ abstract class ParticleGuide implements Runnable {
         this.dustOptions = new Particle.DustOptions(color, 1);
     }
     
+    public Player getPlayer() {
+        return player;
+    }
+    
+    public Color getColor() {
+        return dustOptions.getColor();
+    }
+    
     @Override
     public void run() {
-        stopped = false;
-        while (!stopped && player.isOnline()) {
+        isRunning = true;
+        while (isRunning && player.isOnline()) {
             if (!plugin.isEnabled())
                 break;
             Bukkit.getScheduler().runTaskAsynchronously(plugin, this::show);
             sleep(plugin.config().repeatDelay.get());
         }
-        stopped = true;
+        isRunning = false;
     }
     
     abstract void show();
@@ -47,31 +51,29 @@ abstract class ParticleGuide implements Runnable {
     }
     
     public void stop() {
-        stopped = true;
+        isRunning = false;
     }
     
     public boolean isStopped() {
-        return stopped;
+        return !isRunning;
     }
     
     void spawnParticle(Location location) {
         int density = plugin.config().particleDensity.get();
-        if (plugin.config().globalVisibility.get())
-            player.getWorld()
-                    .spawnParticle(Particle.REDSTONE, location, density, dustOptions);
-        else
-            player
-                    .spawnParticle(Particle.REDSTONE, location, density, dustOptions);
+        if (plugin.config().globalVisibility.get()) {
+            player.getWorld().spawnParticle(Particle.REDSTONE, location, density, dustOptions);
+        } else {
+            player.spawnParticle(Particle.REDSTONE, location, density, dustOptions);
+        }
     }
     
     void highlight(Location location) {
         int density = plugin.config().highlightDensity.get();
-        if (plugin.config().globalVisibility.get())
-            player.getWorld()
-                    .spawnParticle(Particle.REDSTONE, location, density, 1, 1, 1, dustOptions);
-        else
-            player
-                    .spawnParticle(Particle.REDSTONE, location, density, 1, 1, 1, dustOptions);
+        if (plugin.config().globalVisibility.get()) {
+            player.getWorld().spawnParticle(Particle.REDSTONE, location, density, 1, 1, 1, dustOptions);
+        } else {
+            player.spawnParticle(Particle.REDSTONE, location, density, 1, 1, 1, dustOptions);
+        }
     }
     
     Location getPlayerLocation() {

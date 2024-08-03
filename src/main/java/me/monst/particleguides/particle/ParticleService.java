@@ -13,18 +13,31 @@ import org.bukkit.potion.PotionEffectType;
 import java.time.Duration;
 import java.util.*;
 
+/**
+ * A service that manages particle guides and breadcrumbs.
+ */
 public class ParticleService {
     
     private final ParticleGuidesPlugin plugin;
+    // Each player can have multiple guides at once
     private final Map<UUID, List<ParticleGuide>> playerGuideMap;
-    private final Map<UUID, Breadcrumbs> playerBreadcrumbsMap;
+    // Each player can have guide requests from multiple other players at a time
     private final Map<UUID, Cache<Player, NamedColor>> incomingRequests;
+    
+    // All currently loaded breadcrumbs trails
+    private final Set<BreadcrumbsTrail> breadcrumbs;
+    // A visualizer for each breadcrumbs trail
+    private final Map<BreadcrumbsTrail, BreadcrumbsVisualizer> visualizers;
+    // Each player can have only one active breadcrumbs trail at a time
+    private final Map<UUID, ActiveBreadcrumbs> activeBreadcrumbs;
     
     public ParticleService(ParticleGuidesPlugin plugin) {
         this.plugin = plugin;
         this.playerGuideMap = new HashMap<>();
-        this.playerBreadcrumbsMap = new HashMap<>();
         this.incomingRequests = new HashMap<>();
+        this.breadcrumbs = new HashSet<>();
+        this.visualizers = new HashMap<>();
+        this.activeBreadcrumbs = new HashMap<>();
     }
     
     public void addGuideRequest(Player to, Player from, NamedColor color) {
@@ -47,21 +60,28 @@ public class ParticleService {
         requests.invalidate(from);
     }
     
-    public Breadcrumbs getBreadcrumbs(Player player) {
-        return playerBreadcrumbsMap.get(player.getUniqueId());
+    public ActiveBreadcrumbs getActiveBreadcrumbs(Player player) {
+        return activeBreadcrumbs.get(player.getUniqueId());
     }
     
-    public void addBreadcrumbs(Player player, Color color) {
-        removeBreadcrumbs(player);
-        Breadcrumbs breadcrumbs = new Breadcrumbs(plugin, player, color);
-        playerBreadcrumbsMap.put(player.getUniqueId(), breadcrumbs);
-        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, breadcrumbs);
+    public void startActiveBreadcrumbs(Player player, Color color) {
+        stopActiveBreadcrumbs(player);
+        BreadcrumbsTrail breadcrumbs = new BreadcrumbsTrail(player.getLocation().getBlock(), plugin.config().blocksPerBreadcrumb.get());
+        ActiveBreadcrumbs activeBreadcrumbs = new ActiveBreadcrumbs(breadcrumbs, player);
+        this.activeBreadcrumbs.put(player.getUniqueId(), activeBreadcrumbs);
+        BreadcrumbsVisualizer visualizer = new BreadcrumbsVisualizer(plugin, breadcrumbs, player, color);
+        visualizers.put(breadcrumbs, visualizer);
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, visualizer);
     }
     
-    public void removeBreadcrumbs(Player player) {
-        Breadcrumbs breadcrumbs = playerBreadcrumbsMap.remove(player.getUniqueId());
-        if (breadcrumbs != null)
-            breadcrumbs.stop();
+    public void stopActiveBreadcrumbs(Player player) {
+        ActiveBreadcrumbs activeBreadcrumbs = this.activeBreadcrumbs.remove(player.getUniqueId());
+        if (activeBreadcrumbs != null) {
+            BreadcrumbsVisualizer visualizer = visualizers.remove(activeBreadcrumbs.getBreadcrumbs());
+            if (visualizer != null) {
+                visualizer.stop();
+            }
+        }
     }
     
     public boolean hasMaximumGuides(Player player) {
@@ -99,8 +119,9 @@ public class ParticleService {
     
     public void removeGuides(Player player) {
         List<ParticleGuide> guides = playerGuideMap.remove(player.getUniqueId());
-        if (guides != null)
+        if (guides != null) {
             guides.forEach(ParticleGuide::stop);
+        }
     }
     
 }

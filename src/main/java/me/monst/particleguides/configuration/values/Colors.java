@@ -19,7 +19,7 @@ public class Colors extends ConfigurationValue<Map<String, Color>> {
                 getDefaultColorOptions(),
                 new BoundedTransformer<>(
                         new MapTransformer<>(HashMap::new, name -> name, new ColorTransformer()),
-                        Bound.disallowing(Map::isEmpty, empty -> onlyWhite())
+                        Bound.disallowing(Map::isEmpty, empty -> Collections.singletonMap("white", Color.WHITE))
                 )
         );
     }
@@ -44,10 +44,6 @@ public class Colors extends ConfigurationValue<Map<String, Color>> {
         return defaultColorOptions;
     }
     
-    private static Map<String, Color> onlyWhite() {
-        return Collections.singletonMap("white", Color.WHITE);
-    }
-    
     public NamedColor get(String name) throws CommandExecutionException {
         name = name.toLowerCase();
         Color color = get().get(name);
@@ -60,7 +56,7 @@ public class Colors extends ConfigurationValue<Map<String, Color>> {
         return get().entrySet().stream()
                 .skip((int) (get().size() * Math.random())).findFirst()
                 .map(entry -> new NamedColor(entry.getKey(), entry.getValue()))
-                .orElseGet(() -> new NamedColor("white", Color.WHITE));
+                .orElseGet(() -> new NamedColor("white", Color.WHITE)); // Fallback, should never happen
     }
     
     public List<String> search(String search) {

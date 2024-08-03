@@ -14,10 +14,7 @@ import java.util.function.Supplier;
  */
 public class MovingTargetParticleGuide extends ParticleGuide {
     
-    private static final int GRACE_PERIOD = 5;
-    
     private final Supplier<Location> target;
-    private int timesSinceTargetLastSeen = 0;
     
     MovingTargetParticleGuide(ParticleGuidesPlugin plugin, Player player, Supplier<Location> target, Color color) {
         super(plugin, player, color);
@@ -36,12 +33,9 @@ public class MovingTargetParticleGuide extends ParticleGuide {
             Location targetLocation = target.get();
             
             // If the target has disappeared, count up to automatically disable
-            if (targetLocation == null || differentWorlds(startLocation.getWorld(), targetLocation.getWorld())) {
-                if (timesSinceTargetLastSeen++ >= GRACE_PERIOD)
-                    stop();
+            if (targetLocation == null) {
                 return; // Don't spawn a particle
             }
-            timesSinceTargetLastSeen = 0; // Reset the counter
             
             // Find the vector between the player's initial position and the target's current position
             final Vector startToTarget = Vector.between(startLocation, targetLocation);
