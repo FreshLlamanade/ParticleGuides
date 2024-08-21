@@ -81,4 +81,4 @@ ParticleGuides is now installed and ready to use!
 ## Support
 
 If you encounter any issues with ParticleGuides or have any feature requests, please submit an issue on the 
-[GitHub repository](https://github.com/FreshLlamanade/ParticleGuides).
+[GitHub repository](https://github.com/MichaelOwenDyer/ParticleGuides).
