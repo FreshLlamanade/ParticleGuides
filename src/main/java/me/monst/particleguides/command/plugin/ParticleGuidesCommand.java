@@ -39,7 +39,7 @@ public class ParticleGuidesCommand implements Command {
     
     @Override
     public String getUsage() {
-        return "/particleguides <path> <value>";
+        return "/particleguides [path] [value]";
     }
     
     @Override

@@ -1,6 +1,6 @@
 package me.monst.particleguides.command.breadcrumbs;
 
-import me.monst.particleguides.particle.ActiveBreadcrumbs;
+import me.monst.particleguides.particle.BreadcrumbsTrail;
 import me.monst.particleguides.particle.ParticleService;
 import me.monst.pluginutil.command.Arguments;
 import me.monst.pluginutil.command.Command;
@@ -9,6 +9,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+@SuppressWarnings("unused")
 class BreadcrumbsResume implements Command {
     
     private final ParticleService particleService;
@@ -35,12 +36,12 @@ class BreadcrumbsResume implements Command {
     @Override
     public void execute(CommandSender sender, Arguments args) throws CommandExecutionException {
         Player player = Command.playerOnly(sender);
-        ActiveBreadcrumbs breadcrumbs = particleService.getActiveBreadcrumbs(player);
+        BreadcrumbsTrail breadcrumbs = particleService.getBreadcrumbsTrail(player);
         if (breadcrumbs == null)
             Command.fail("You are not currently dropping breadcrumbs.");
         if (!breadcrumbs.isPaused())
             Command.fail("Your breadcrumbs are not paused. Did you mean /breadcrumbs pause?");
-        breadcrumbs.setPauseState(ActiveBreadcrumbs.PauseState.ACTIVE);
+        breadcrumbs.setPauseState(BreadcrumbsTrail.PauseState.ACTIVE);
         player.sendMessage(ChatColor.YELLOW + "Resuming breadcrumbs.");
     }
     

@@ -39,7 +39,7 @@ class GuideDeath implements Command {
     
     @Override
     public String getUsage() {
-        return "/guide death [color]";
+        return "/guide death <color>";
     }
     
     @Override

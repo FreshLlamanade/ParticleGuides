@@ -47,7 +47,7 @@ class GuidePlayer implements Command {
     
     @Override
     public String getUsage() {
-        return "/guide player <name> [color]";
+        return "/guide player [name] <color>";
     }
     
     @Override

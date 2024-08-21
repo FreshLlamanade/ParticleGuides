@@ -5,6 +5,8 @@ import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import java.util.Objects;
+
 /**
  * A particle guide to a specific, unmoving location.
  */
@@ -18,10 +20,9 @@ public class FixedLocationParticleGuide extends ParticleGuide {
     }
     
     @Override
-    void show() {
+    void showGuide() {
         // Cannot show guide to a target in a different world
-        if (differentWorlds(player.getWorld(), target.getWorld())) {
-            stop();
+        if (!Objects.equals(player.getWorld(), target.getWorld())) {
             return;
         }
         
@@ -36,8 +37,10 @@ public class FixedLocationParticleGuide extends ParticleGuide {
         
         // Spawn particles at every block between the player and the target
         for (int baseDistance = 1; baseDistance <= plugin.config().guideLength.get(); baseDistance++) {
-            if (isStopped())
+            if (!isRunning()) {
                 return;
+            }
+            
             // Get the distance the player has moved in the direction of the target (could be negative)
             double movedTowardsTarget = Vector.between(startLocation, getPlayerLocation()).dot(startToTargetDirection);
             double nextParticleDistance = baseDistance + movedTowardsTarget;
@@ -55,8 +58,9 @@ public class FixedLocationParticleGuide extends ParticleGuide {
             
             sleep(plugin.config().particleDelay.get());
         }
-        if (plugin.config().alwaysHighlightTarget.get())
+        if (plugin.config().alwaysHighlightTarget.get()) {
             highlight(target); // Spawn a particle puff at the target location
+        }
     }
     
 }

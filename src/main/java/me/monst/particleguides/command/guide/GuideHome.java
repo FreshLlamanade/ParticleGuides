@@ -41,7 +41,7 @@ class GuideHome implements Command {
     
     @Override
     public String getUsage() {
-        return "/guide home <name> [color]";
+        return "/guide home [name] <color>";
     }
     
     @Override

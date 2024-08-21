@@ -6,35 +6,43 @@ import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class BreadcrumbsVisualizer extends ParticleGuide {
     
-    private final BreadcrumbsTrail breadcrumbs;
-    private boolean reversed = true; // normally we want to show the breadcrumbs going backwards from the player's current location
+    /**
+     * The direction the breadcrumb particles travel
+     */
+    public enum Direction {
+        YOUNGEST_TO_OLDEST, // Starting at the most recent breadcrumb moving back to the oldest breadcrumb
+        OLDEST_TO_YOUNGEST // Starting at the oldest breadcrumb moving forward to the most recent breadcrumb
+    }
     
-    public BreadcrumbsVisualizer(ParticleGuidesPlugin plugin, BreadcrumbsTrail breadcrumbs, Player player, Color color) {
+    private final ArrayList<Breadcrumb> breadcrumbs;
+    private boolean youngestToOldest = true;
+    
+    public BreadcrumbsVisualizer(ParticleGuidesPlugin plugin, ArrayList<Breadcrumb> breadcrumbs, Player player, Color color) {
         super(plugin, player, color);
         this.breadcrumbs = breadcrumbs;
     }
     
-    public void setReversed(boolean reversed) {
-        this.reversed = reversed;
+    public void setDirection(Direction direction) {
+        this.youngestToOldest = direction == Direction.YOUNGEST_TO_OLDEST;
     }
     
     @Override
-    void show() {
-        List<Breadcrumb> breadcrumbList = breadcrumbs.list();
-        int i = reversed ? breadcrumbList.size() - 1 : 0;
-        while (isRunning && i >= 0 && i < breadcrumbList.size()) {
-            boolean isAtEndOfTrail = reversed ? i == 0 : i == breadcrumbList.size() - 1;
-            Location location = breadcrumbList.get(i).getLocation();
-            if (isAtEndOfTrail)
+    void showGuide() {
+        int i = youngestToOldest ? breadcrumbs.size() - 1 : 0;
+        while (isRunning && i >= 0 && i < breadcrumbs.size()) {
+            boolean isAtEndOfTrail = youngestToOldest ? i == 0 : i == breadcrumbs.size() - 1;
+            Location location = breadcrumbs.get(i).getBlock().getLocation().add(0.5, 0.5, 0.5);
+            if (isAtEndOfTrail) {
                 highlight(location);
-            else
+            } else {
                 spawnParticle(location);
+            }
             sleep(plugin.config().particleDelay.get());
-            i += reversed ? -1 : 1;
+            i += youngestToOldest ? -1 : 1;
         }
     }
 }

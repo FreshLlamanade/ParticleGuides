@@ -41,7 +41,7 @@ class GuideCoords implements Command {
     
     @Override
     public String getUsage() {
-        return "/guide coords <x> <y> <z> [color]";
+        return "/guide coords [x] [y] [z] <color>";
     }
     
     @Override

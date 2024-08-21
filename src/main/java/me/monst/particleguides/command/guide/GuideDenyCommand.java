@@ -32,8 +32,8 @@ public class GuideDenyCommand extends GuideRequestResponseCommand {
     @Override
     public void execute(CommandSender sender, Arguments args) throws CommandExecutionException {
         Player player = Command.playerOnly(sender);
-        Result result = processRequest(player, args);
-        Player requester = result.requester;
+        Request request = processRequest(player, args);
+        Player requester = request.requester;
         
         player.sendMessage(ChatColor.YELLOW + "You have denied " + requester.getName() + "'s guide request.");
         requester.sendMessage(ChatColor.RED + player.getName() + " has denied your guide request.");

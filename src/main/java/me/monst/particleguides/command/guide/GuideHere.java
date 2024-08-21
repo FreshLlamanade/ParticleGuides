@@ -37,7 +37,7 @@ class GuideHere implements Command {
     
     @Override
     public String getUsage() {
-        return "/guide here [color]";
+        return "/guide here <color>";
     }
     
     @Override

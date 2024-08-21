@@ -30,12 +30,12 @@ class BreadcrumbsStart implements Command {
     
     @Override
     public String getDescription() {
-        return "Leave a trail of particles behind you to guide you back.";
+        return "Leave a trail of particles behind to find your way back.";
     }
     
     @Override
     public String getUsage() {
-        return "/breadcrumbs start [color]";
+        return "/breadcrumbs start <color>";
     }
     
     @Override
@@ -43,7 +43,7 @@ class BreadcrumbsStart implements Command {
         Player player = Command.playerOnly(sender);
         NamedColor color = args.first().map(colors::get).orElseGet(colors::random);
         player.sendMessage(ChatColor.YELLOW + "Starting breadcrumbs in " + color.getName() + "...");
-        particleService.startActiveBreadcrumbs(player, color.getColor());
+        particleService.startBreadcrumbs(player, color.getColor());
     }
     
     @Override

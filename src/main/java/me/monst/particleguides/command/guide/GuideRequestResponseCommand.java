@@ -22,35 +22,38 @@ abstract class GuideRequestResponseCommand implements Command {
     
     @Override
     public Iterable<?> getTabCompletions(Player player, Arguments args) {
-        if (args.size() != 1)
+        if (args.size() != 1) {
             return Collections.emptyList();
+        }
         return particleService.getIncomingRequests(player).keySet().stream()
                 .map(Player::getName)
                 .collect(Collectors.toList());
     }
     
-    Result processRequest(Player player, Arguments args) throws CommandExecutionException {
+    Request processRequest(Player player, Arguments args) throws CommandExecutionException {
         Map<Player, NamedColor> requests = particleService.getIncomingRequests(player);
-        if (requests.isEmpty())
+        if (requests.isEmpty()) {
             Command.fail("You have no incoming guide requests.");
+        }
         
         Player requester = args.first()
                 .map(Input.toPlayer(name -> "Player not found."))
                 .orElseGet(() -> requests.keySet().iterator().next());
         
-        if (!requests.containsKey(requester))
+        if (!requests.containsKey(requester)) {
             Command.fail("You have no incoming guide requests from " + requester.getName() + ".");
+        }
         
         NamedColor color = requests.get(requester);
         particleService.removeRequest(player, requester);
-        return new Result(requester, color);
+        return new Request(requester, color);
     }
     
-    static class Result {
+    static class Request {
         public final Player requester;
         public final NamedColor color;
         
-        public Result(Player requester, NamedColor color) {
+        public Request(Player requester, NamedColor color) {
             this.requester = requester;
             this.color = color;
         }

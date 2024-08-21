@@ -22,12 +22,13 @@ public class MovingTargetParticleGuide extends ParticleGuide {
     }
     
     @Override
-    void show() {
+    void showGuide() {
         // Get the location where the player was initially standing
         final Location startLocation = getPlayerLocation();
         for (int baseDistance = 1; baseDistance <= plugin.config().guideLength.get(); baseDistance++) {
-            if (isStopped())
+            if (!isRunning()) {
                 return;
+            }
             
             // Get the current target location
             Location targetLocation = target.get();
@@ -61,8 +62,9 @@ public class MovingTargetParticleGuide extends ParticleGuide {
             
             sleep(plugin.config().particleDelay.get());
         }
-        if (plugin.config().alwaysHighlightTarget.get())
+        if (plugin.config().alwaysHighlightTarget.get()) {
             highlight(target.get()); // Spawn a particle puff at the target location
+        }
     }
     
 }

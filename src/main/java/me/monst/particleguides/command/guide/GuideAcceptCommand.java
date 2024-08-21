@@ -33,9 +33,9 @@ public class GuideAcceptCommand extends GuideRequestResponseCommand {
     @Override
     public void execute(CommandSender sender, Arguments args) throws CommandExecutionException {
         Player player = Command.playerOnly(sender);
-        Result result = processRequest(player, args);
-        Player requester = result.requester;
-        NamedColor color = result.color;
+        Request request = processRequest(player, args);
+        Player requester = request.requester;
+        NamedColor color = request.color;
         
         player.sendMessage(ChatColor.YELLOW + "You have accepted " + requester.getName() + "'s guide request.");
         requester.sendMessage(ChatColor.GREEN + player.getName() + " has accepted your guide request.");

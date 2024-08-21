@@ -28,15 +28,16 @@ public class BreadcrumbsListener implements Listener {
     public void onVehicleMove(VehicleMoveEvent event) {
         Block from = event.getFrom().getBlock();
         Block to = event.getTo().getBlock();
-        if (Objects.equals(from, to))
+        if (Objects.equals(from, to)) {
             return;
+        }
         for (Entity passenger : event.getVehicle().getPassengers()) {
             if (!(passenger instanceof Player))
                 continue;
-            ActiveBreadcrumbs breadcrumbs = particleService.getActiveBreadcrumbs((Player) passenger);
+            BreadcrumbsTrail breadcrumbs = particleService.getBreadcrumbsTrail((Player) passenger);
             if (breadcrumbs == null)
                 return;
-            // The breadcrumbs will be in the ground if we don't adjust it upwards
+            // The breadcrumbs will be in the ground if we don't adjust the location upwards
             breadcrumbs.stepOnBlock(to.getRelative(BlockFace.UP));
         }
     }
@@ -50,7 +51,7 @@ public class BreadcrumbsListener implements Listener {
         Block to = event.getTo().getBlock();
         if (Objects.equals(from, to))
             return;
-        ActiveBreadcrumbs breadcrumbs = particleService.getActiveBreadcrumbs(event.getPlayer());
+        BreadcrumbsTrail breadcrumbs = particleService.getBreadcrumbsTrail(event.getPlayer());
         if (breadcrumbs == null)
             return;
         breadcrumbs.stepOnBlock(to);
@@ -60,9 +61,10 @@ public class BreadcrumbsListener implements Listener {
     @SuppressWarnings("unused")
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
-        ActiveBreadcrumbs breadcrumbs = particleService.getActiveBreadcrumbs(player);
+        BreadcrumbsTrail breadcrumbs = particleService.getBreadcrumbsTrail(player);
         if (breadcrumbs != null) {
-            breadcrumbs.setPauseState(ActiveBreadcrumbs.PauseState.PAUSED_AUTO_RESUME);
+            breadcrumbs.setPauseState(BreadcrumbsTrail.PauseState.PAUSED_AUTO_RESUME);
+            breadcrumbs.getVisualizer().setDirection(BreadcrumbsVisualizer.Direction.OLDEST_TO_YOUNGEST);
             player.sendMessage("Breadcrumbs automatically paused on death.");
         }
     }
