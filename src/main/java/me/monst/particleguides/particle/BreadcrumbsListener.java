@@ -1,5 +1,6 @@
 package me.monst.particleguides.particle;
 
+import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
@@ -65,7 +66,7 @@ public class BreadcrumbsListener implements Listener {
         if (breadcrumbs != null) {
             breadcrumbs.setPauseState(BreadcrumbsTrail.PauseState.PAUSED_AUTO_RESUME);
             breadcrumbs.getVisualizer().setDirection(BreadcrumbsVisualizer.Direction.OLDEST_TO_YOUNGEST);
-            player.sendMessage("Breadcrumbs automatically paused on death.");
+            player.sendMessage(ChatColor.YELLOW + "Breadcrumbs automatically paused on death.");
         }
     }
     

@@ -26,13 +26,14 @@ public class BreadcrumbsTrail {
     
     private BreadcrumbsVisualizer visualizer;
     
-    private int maxLength = getMaxPermissibleLength();
-    private boolean maxLengthReached = false;
+    private int maxLength;
+    private boolean maxLengthReached;
     private PauseState pauseState = PauseState.ACTIVE;
     
     public BreadcrumbsTrail(Player player, int interBreadcrumbDistance) {
         this.player = player;
         this.interBreadcrumbDistance = interBreadcrumbDistance;
+        this.maxLength = getMaxPermissibleLength();
         Breadcrumb firstBreadcrumb = new Breadcrumb(player.getLocation().getBlock());
         this.breadcrumbs = new ArrayList<>();
         this.breadcrumbs.add(firstBreadcrumb);
@@ -142,6 +143,7 @@ public class BreadcrumbsTrail {
                 if (existingIndex == breadcrumbs.size() - 1) {
                     pauseState = PauseState.ACTIVE;
                     visualizer.setDirection(BreadcrumbsVisualizer.Direction.YOUNGEST_TO_OLDEST);
+                    player.sendMessage(ChatColor.YELLOW + "Resuming breadcrumbs trail.");
                 }
             } else if (existingIndex < breadcrumbs.size() - 1) {
                 pickUpBreadcrumbs(existingIndex + 1);
